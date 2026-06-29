@@ -1,0 +1,10 @@
+services:
+  evaluacion:
+    build: .
+    image: caronutriholistica-evaluacion:latest
+    container_name: caronutriholistica-evaluacion
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8080}:80"
+    environment:
+      WEBHOOK_URL: "${WEBHOOK_URL:-https://n8n.caronutriholistica.tech/webhook/fcfad32f-13a7-4148-b2db-e9af457ba77d}"

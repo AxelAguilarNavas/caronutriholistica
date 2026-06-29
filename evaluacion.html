@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Qué está hablando tu cuerpo? · Carolina Marino</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--t:#8b3c0b;--c:#622100;--o:#b3a12f;--cr:#e4d5c8;--bg:#faf7f4;--su:#f0ebe4;--g:#7a6a5a;--ve:#1a7a3e;--am:#c88a00;--ro:#b02020}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--c);min-height:100vh}
+.hdr{background:var(--t);padding:14px 20px;text-align:center}
+.hdr-n{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cr);font-weight:500}
+.hdr-s{font-size:10px;color:var(--cr);opacity:.7;font-style:italic;margin-top:2px}
+.pb-w{background:var(--cr);height:3px}.pb-f{height:3px;background:var(--t);transition:width .5s;width:0}
+.wrap{max-width:560px;margin:0 auto;padding:28px 18px 60px}
+.step{display:none}.step.on{display:block}
+.tag{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--o);font-weight:500;margin-bottom:8px}
+.h1{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;line-height:1.2;color:var(--c);margin-bottom:12px}
+.lead{font-size:13px;color:var(--g);line-height:1.75;margin-bottom:18px}
+.divhr{width:32px;height:2px;background:var(--t);opacity:.4;margin:14px 0}
+/* CHECKBOXES */
+.ck-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.ck-item{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;background:#fff;border:1.5px solid var(--cr);border-radius:7px;cursor:pointer;transition:all .13s}
+.ck-item:hover{border-color:var(--t)}.ck-item.on{border-color:var(--t);background:var(--su)}
+.ck-box{width:16px;height:16px;border:1.5px solid var(--cr);border-radius:3px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t);transition:all .13s}
+.ck-item.on .ck-box{background:var(--t);border-color:var(--t);color:#fff}
+.ck-txt{font-size:12px;color:var(--c);line-height:1.45}
+.urg{display:none;margin-top:10px;padding:10px 12px;background:#fce8e8;border-radius:6px;font-size:12px;color:var(--ro);line-height:1.6;font-weight:500}.urg.on{display:block}
+/* FORMS */
+.stit{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--c);margin-bottom:5px}
+.ssub{font-size:12px;color:var(--g);margin-bottom:18px;line-height:1.6}
+.fg{margin-bottom:13px}
+.fl{display:block;font-size:10px;font-weight:500;color:var(--g);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.fi{width:100%;padding:10px 12px;border:1px solid var(--cr);border-radius:6px;background:#fff;font-family:'Jost',sans-serif;font-size:13px;color:var(--c);outline:none;transition:border .2s}
+.fi:focus{border-color:var(--t)}
+.fs{width:100%;padding:10px 12px;border:1px solid var(--cr);border-radius:6px;background:#fff;font-family:'Jost',sans-serif;font-size:13px;color:var(--c);outline:none;appearance:none;cursor:pointer}
+.fta{width:100%;padding:10px 12px;border:1px solid var(--cr);border-radius:6px;background:#fff;font-family:'Jost',sans-serif;font-size:13px;color:var(--c);outline:none;resize:none;min-height:65px}
+.priv{font-size:10px;color:var(--g);background:var(--su);border-radius:5px;padding:9px 11px;margin:12px 0;line-height:1.6}
+/* RADIOS */
+.rl{font-size:12px;font-weight:500;color:var(--c);margin:12px 0 7px;display:block}
+.ro-g{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.ro{display:flex;align-items:center;gap:8px;padding:8px 11px;background:#fff;border:1px solid var(--cr);border-radius:6px;cursor:pointer;font-size:12px;color:var(--c);transition:border .13s}
+.ro:hover{border-color:var(--t)}.ro input{accent-color:var(--t);flex-shrink:0}.ro.on{border-color:var(--t);background:var(--su)}
+.sec-div{border-top:1px solid var(--cr);margin:16px 0 14px;padding-top:14px}
+/* SYMPTOMS */
+.sy-tag{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--o);font-weight:500;margin-bottom:5px}
+.sy-tit{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;color:var(--c);margin-bottom:4px}
+.sy-sub{font-size:12px;color:var(--g);margin-bottom:13px;line-height:1.55}
+.leg{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap}.le{font-size:10px;color:var(--g)}
+.sy-list{display:flex;flex-direction:column;gap:6px}
+.sy-row{background:#fff;border:1px solid var(--cr);border-radius:7px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sy-txt{font-size:12px;color:var(--c);flex:1;line-height:1.4}
+.sb-g{display:flex;gap:3px;flex-shrink:0}
+.sb{width:28px;height:28px;border-radius:50%;border:1.5px solid #ddd;background:#fff;font-size:11px;font-weight:500;color:#aaa;cursor:pointer;font-family:'Jost',sans-serif;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.sb:hover{border-color:var(--t);color:var(--t)}.sb.on{border-color:var(--c);background:var(--c);color:#fff}
+/* TRIAJE */
+.tr-box{background:var(--su);border-radius:9px;padding:16px;margin-bottom:14px}
+.tr-tit{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--c);margin-bottom:5px}
+.tr-sub{font-size:12px;color:var(--g);margin-bottom:14px;line-height:1.55}
+/* SALIDAS */
+.salida{display:none;border-radius:9px;padding:20px;text-align:center;margin-top:8px}.salida.on{display:block}
+.s-crisis{background:#fce8e8;border:1px solid var(--ro)}.s-fuera{background:var(--su);border:1px solid var(--cr)}
+.s-icon{font-size:26px;margin-bottom:10px}
+.s-tit{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--c);margin-bottom:8px}
+.s-txt{font-size:12px;color:var(--g);line-height:1.7}
+/* CONSENTIMIENTO */
+.con-box{background:#fff;border:1.5px solid var(--cr);border-radius:9px;padding:14px;margin-bottom:13px}
+.con-tit{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500;color:var(--c);margin-bottom:7px}
+.con-txt{font-size:11px;color:var(--g);line-height:1.75;margin-bottom:11px}
+.con-row{display:flex;align-items:flex-start;gap:8px;cursor:pointer}
+.con-row input{accent-color:var(--t);margin-top:2px;flex-shrink:0}
+.con-lbl{font-size:11px;color:var(--c);line-height:1.5}
+.hint{text-align:center;padding:12px;font-size:11px;color:var(--g)}
+/* LOADING */
+.loading{display:none;text-align:center;padding:60px 20px}.loading.on{display:block}
+.spin{width:42px;height:42px;border:3px solid var(--cr);border-top-color:var(--t);border-radius:50%;animation:rot .8s linear infinite;margin:0 auto 18px}
+@keyframes rot{to{transform:rotate(360deg)}}
+.ld-tit{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--c)}
+.ld-sub{font-size:12px;color:var(--g);margin-top:5px}
+/* RESULTS */
+.r-tag{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--o);font-weight:500;margin-bottom:7px;text-align:center}
+.r-tit{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--c);text-align:center;margin-bottom:7px;line-height:1.2}
+.r-sub{font-size:12px;color:var(--g);text-align:center;line-height:1.7;margin-bottom:20px}
+.u-ban{display:none;background:#fce8e8;border-left:3px solid var(--ro);border-radius:0 7px 7px 0;padding:11px 14px;margin-bottom:14px;font-size:12px;color:var(--ro);line-height:1.6}.u-ban.on{display:block}
+.bars{display:flex;flex-direction:column;gap:11px;margin-bottom:18px}
+.b-card{background:#fff;border:1px solid var(--cr);border-radius:9px;padding:12px 14px}
+.b-card-a{border-color:#e0a400;background:#fffaf0}.b-card-r{border-color:var(--ro);background:#fff5f5}
+.b-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.b-name{font-size:12px;font-weight:500;color:var(--c)}
+.bdg{font-size:9px;font-weight:600;padding:3px 10px;border-radius:12px;text-transform:uppercase;letter-spacing:.03em}
+.bdg-v{background:var(--ve);color:#fff}.bdg-a{background:var(--am);color:#fff}.bdg-r{background:var(--ro);color:#fff}
+.trk{height:12px;background:#f1e8df;border-radius:8px;overflow:hidden}
+.fill{height:12px;border-radius:8px;transition:width 1.3s ease;width:0}
+.fill-v{background:var(--ve)}.fill-a{background:var(--am)}.fill-r{background:var(--ro)}
+.b-desc{font-size:11px;color:var(--g);margin-top:6px;line-height:1.55}
+.b-risk{font-size:10px;color:var(--c);font-weight:600;margin-top:7px;letter-spacing:.02em;text-transform:uppercase}
+.p5{background:var(--su);border-left:3px solid var(--o);border-radius:0 7px 7px 0;padding:10px 13px;margin-bottom:14px;font-size:12px;color:var(--g);font-style:italic;line-height:1.6}
+.pat-box{background:var(--su);border-left:3px solid var(--t);border-radius:0 7px 7px 0;padding:13px 15px;margin-bottom:18px}
+.pat-tit{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--c);margin-bottom:7px}
+.pat-txt{font-size:12px;color:var(--g);line-height:1.75}
+/* COSTO VIDA */
+.cos-tit{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--c);margin-bottom:5px}
+.cos-sub{font-size:12px;color:var(--g);margin-bottom:11px}
+.cos-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.cos-item{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;background:#fff;border:1.5px solid var(--cr);border-radius:7px;cursor:pointer;transition:all .13s}
+.cos-item:hover{border-color:var(--t)}.cos-item.on{border-color:var(--t);background:var(--su)}
+.cos-chk{width:16px;height:16px;border:1.5px solid var(--cr);border-radius:3px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t)}
+.cos-item.on .cos-chk{background:var(--t);border-color:var(--t);color:#fff}
+.cos-txt{font-size:12px;color:var(--c);line-height:1.4}
+.cos-urg{display:none;margin-top:10px;padding:11px 13px;background:#fce8e8;border-radius:7px;font-size:12px;color:var(--ro);line-height:1.65;font-weight:500}.cos-urg.on{display:block}
+.cta{background:#fffdf9;border:1.5px solid #d8b9a1;border-radius:10px;padding:0 0 18px;text-align:center;margin-top:8px;box-shadow:0 12px 28px rgba(98,33,0,.11);overflow:hidden}
+.cta::before{content:"PRECIO FUNDADOR · PRIMEROS 20 CUPOS";display:block;background:#8b3c0b;color:#fffdf9;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:9px 10px}
+.cta-tit{font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:600;color:var(--c);margin:18px 18px 8px;line-height:1.12}
+.cta-sub{font-size:13px;color:var(--g);margin:0 18px 14px;line-height:1.65}
+.offer-signal{margin:0 18px 12px;padding:12px 13px;background:#fff;border:1px solid #ead8ca;border-radius:8px;text-align:left}
+.signal-k{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#8b3c0b;margin-bottom:5px}
+.signal-t{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--c);line-height:1.25;margin-bottom:4px}
+.signal-p{font-size:12px;color:var(--g);line-height:1.6}
+.value-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin:0 18px 12px}
+.value-card{background:#f8f1e9;border:1px solid #ead8ca;border-radius:8px;padding:9px 6px;text-align:center}
+.value-n{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--t);line-height:1}
+.value-l{font-size:9px;color:var(--g);line-height:1.25;margin-top:4px;text-transform:uppercase;letter-spacing:.04em}
+.cta-lo{background:#f7efe8;border:1px solid #e7d6c8;border-radius:8px;padding:11px 13px;margin:0 18px 12px;text-align:left}
+.cta-lo p{font-size:12px;color:var(--c);line-height:1.65;margin-bottom:3px}.cta-lo p::before{content:"✓  ";color:#1a7a3e;font-weight:700}
+.proof-box{background:#fff;border:1px solid #e7d6c8;border-radius:8px;margin:0 18px 12px;padding:12px;text-align:left;color:var(--c)}
+.proof-k{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#8b3c0b;margin-bottom:7px}
+.proof-q{font-size:14px;font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.35;margin-bottom:8px;color:var(--c)}
+.proof-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.proof-mini{background:#f6f4ee;border:1px solid #e2ded2;border-radius:7px;padding:8px;font-size:11px;line-height:1.35;color:var(--g)}
+.why-box{background:#f8f1e9;border-left:3px solid var(--t);border-radius:0 8px 8px 0;margin:0 18px 12px;padding:11px 12px;text-align:left}
+.why-t{font-size:11px;font-weight:700;color:var(--t);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+.why-box p{font-size:12px;color:var(--c);line-height:1.55;margin:0}
+.fit-box{background:#fff;border:1px solid #e7d6c8;border-radius:8px;margin:0 18px 12px;padding:11px 12px;text-align:left}
+.fit-t{font-size:11px;font-weight:800;color:var(--c);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+.fit-row{font-size:12px;color:var(--g);line-height:1.55;margin-bottom:5px}.fit-row strong{color:var(--t)}
+.urg-price{background:#fff;border:1.5px solid #cfa98e;border-radius:9px;padding:12px;margin:12px 18px;text-align:center}
+.urg-price-t{font-size:12px;color:var(--c);font-weight:700;line-height:1.45;margin-bottom:10px}
+.count-row{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.count-box{background:#8b3c0b;border-radius:7px;padding:10px 4px;text-align:center;color:#fff}
+.count-num{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;line-height:.95}
+.count-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:#ead8ca;margin-top:4px}
+.pr-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:4px}
+.p-old{font-size:13px;color:var(--g);text-decoration:line-through;opacity:.75}
+.p-new{font-family:'Cormorant Garamond',serif;font-size:35px;font-weight:700;color:var(--t)}
+.sc{font-size:11px;color:var(--g);opacity:.95;margin:0 18px 13px;display:block;line-height:1.45}
+.btn-cta{width:calc(100% - 36px);padding:15px 12px;background:var(--t);color:#fff;border:none;border-radius:7px;font-family:'Jost',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 5px 0 #622100}
+.btn-cta:hover{background:var(--c);transform:translateY(1px);box-shadow:0 4px 0 #4d1900}
+.cta-note{font-size:10px;color:var(--g);margin:12px 18px 0;opacity:.95;line-height:1.45}
+.trust-note{font-size:10px;color:var(--g);margin:9px 18px 0;line-height:1.5;background:#f8f1e9;border-radius:7px;padding:8px 10px}
+/* SALIDA CUPOS */
+.out-wrap{max-width:400px;margin:60px auto;text-align:center;padding:0 20px}
+.out-icon{font-size:30px;margin-bottom:14px}
+.out-tit{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:500;color:var(--c);margin-bottom:10px}
+.out-txt{font-size:13px;color:var(--g);line-height:1.75}
+/* BUTTONS */
+.btn{width:100%;padding:12px;background:var(--t);color:#fff;border:none;border-radius:6px;font-family:'Jost',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background .14s;margin-top:18px}
+.btn:hover{background:var(--c)}.btn:disabled{background:var(--cr);color:var(--g);cursor:not-allowed}
+.btn-bk{background:none;border:none;color:var(--g);font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;padding:5px 0;margin-bottom:14px;display:flex;align-items:center;gap:4px}
+.btn-bk:hover{color:var(--c)}
+.disc{font-size:10px;color:var(--g);text-align:center;margin-top:24px;padding-top:14px;border-top:1px solid var(--cr);line-height:1.6}
+.pf-box{background:var(--su);border-left:3px solid var(--ve);border-radius:0 7px 7px 0;padding:13px 15px;margin-bottom:16px}
+.pf-tit{font-size:10px;font-weight:600;color:#1a7a3e;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.pf-txt{font-size:13px;color:var(--c);line-height:1.7;font-style:italic}
+.df-box{background:#fef9ec;border-left:3px solid var(--am);border-radius:0 7px 7px 0;padding:13px 15px;margin-bottom:16px}
+.df-tit{font-size:10px;font-weight:600;color:#c88a00;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.df-txt{font-size:13px;color:var(--c);line-height:1.7}
+@media(max-width:480px){.h1{font-size:25px}.sy-row{flex-direction:column;align-items:flex-start}.sb-g{margin-top:5px}}
+</style>
+</head>
+<body>
+<div class="hdr"><div class="hdr-n">CAROLINA MARINO</div><div class="hdr-s">Holistic Nutritional Consultant</div></div>
+<div class="pb-w"><div class="pb-f" id="pb"></div></div>
+<div class="wrap">
+
+<!-- S0: INTRO -->
+<div class="step on" id="s0">
+  <div class="tag">Lectura de síntomas · NutriBalance</div>
+  <div class="h1">¿Qué está hablando tu cuerpo?</div>
+  <div class="lead">Si llevas meses sintiéndote diferente y nadie te da respuestas — esto es para ti.</div>
+  <div class="divhr"></div>
+  <div style="font-size:12px;color:var(--g);margin-bottom:10px;font-weight:500">Marca lo que reconoces:</div>
+  <div class="ck-list" id="intro-list">
+    <div class="ck-item" onclick="ckIntro(this)" data-v="analisis_bien"><div class="ck-box"></div><div class="ck-txt">Me dijeron que mis análisis están bien pero yo sigo sintiéndome mal</div></div>
+    <div class="ck-item" onclick="ckIntro(this)" data-v="cansada_dormida"><div class="ck-box"></div><div class="ck-txt">Me levanto cansada aunque haya dormido</div></div>
+    <div class="ck-item" onclick="ckIntro(this)" data-v="humor_cambiado"><div class="ck-box"></div><div class="ck-txt">Mi humor cambió y yo misma no me reconozco</div></div>
+    <div class="ck-item" onclick="ckIntro(this)" data-v="peso_cuido"><div class="ck-box"></div><div class="ck-txt">Subo de peso aunque me cuido</div></div>
+    <div class="ck-item" onclick="ckIntro(this)" data-v="ansiedad"><div class="ck-box"></div><div class="ck-txt">Tengo ansiedad o palpitaciones sin razón clara</div></div>
+    <div class="ck-item" onclick="ckIntro(this)" data-v="perdiendome"><div class="ck-box"></div><div class="ck-txt">Siento que me estoy perdiendo de mí misma</div></div>
+  </div>
+  <div class="urg" id="intro-urg">Tu cuerpo lleva tiempo hablando. En unos minutos recibirás una lectura inicial de las señales que podría estar mostrando.</div>
+  <button class="btn" onclick="valS0()">Empezar ahora →</button>
+</div>
+
+<!-- S1: PAÍS -->
+<div class="step" id="s1">
+  <button class="btn-bk" onclick="go(0)">← Atrás</button>
+  <div class="tag">Paso 1 de 13</div>
+  <div class="stit">¿En qué país resides actualmente?</div>
+  <div class="fg" style="margin-top:16px">
+    <select class="fs" id="f-pais">
+      <option value="">Selecciona tu país</option>
+      <optgroup label="Norteamérica">
+        <option value="estados_unidos">Estados Unidos</option>
+        <option value="canada">Canadá</option>
+        <option value="mexico">México</option>
+      </optgroup>
+      <optgroup label="Centroamérica y Caribe">
+        <option value="costa_rica">Costa Rica</option>
+        <option value="guatemala">Guatemala</option>
+        <option value="honduras">Honduras</option>
+        <option value="el_salvador">El Salvador</option>
+        <option value="nicaragua">Nicaragua</option>
+        <option value="panama">Panamá</option>
+        <option value="republica_dominicana">República Dominicana</option>
+        <option value="cuba">Cuba</option>
+        <option value="puerto_rico">Puerto Rico</option>
+      </optgroup>
+      <optgroup label="Suramérica">
+        <option value="colombia">Colombia</option>
+        <option value="venezuela">Venezuela</option>
+        <option value="ecuador">Ecuador</option>
+        <option value="peru">Perú</option>
+        <option value="bolivia">Bolivia</option>
+        <option value="chile">Chile</option>
+        <option value="argentina">Argentina</option>
+        <option value="uruguay">Uruguay</option>
+        <option value="paraguay">Paraguay</option>
+      </optgroup>
+      <optgroup label="Europa">
+        <option value="espana">España</option>
+        <option value="otro_europa">Otro país de Europa</option>
+      </optgroup>
+      <optgroup label="Otro">
+        <option value="otro">Otro país</option>
+      </optgroup>
+    </select>
+  </div>
+  <button class="btn" onclick="valS1()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S2–S13: INVESTIGACIÓN DE MERCADO -->
+
+<!-- S2: EDAD -->
+<div class="step" id="s2">
+  <button class="btn-bk" onclick="go(1)">← Atrás</button>
+  <div class="tag">Paso 2 de 13</div>
+  <div class="stit">¿Cuál es tu edad?</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="edad" value="menos35"> Menos de 35</label>
+    <label class="ro"><input type="radio" name="edad" value="35_39"> 35–39</label>
+    <label class="ro"><input type="radio" name="edad" value="40_44"> 40–44</label>
+    <label class="ro"><input type="radio" name="edad" value="45_49"> 45–49</label>
+    <label class="ro"><input type="radio" name="edad" value="50_54"> 50–54</label>
+    <label class="ro"><input type="radio" name="edad" value="55_60"> 55–60</label>
+    <label class="ro"><input type="radio" name="edad" value="mas60"> Más de 60</label>
+  </div>
+  <button class="btn" onclick="valS2()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S3: SITUACIÓN ACTUAL -->
+<div class="step" id="s3">
+  <button class="btn-bk" onclick="go(2)">← Atrás</button>
+  <div class="tag">Paso 3 de 13</div>
+  <div class="stit">¿Cuál describe mejor tu situación actual?</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="situacion" value="trabajo_full"> Trabajo tiempo completo</label>
+    <label class="ro"><input type="radio" name="situacion" value="trabajo_medio"> Trabajo medio tiempo</label>
+    <label class="ro"><input type="radio" name="situacion" value="emprendedora"> Tengo mi propio negocio o emprendimiento</label>
+    <label class="ro"><input type="radio" name="situacion" value="independiente"> Soy profesional independiente</label>
+    <label class="ro"><input type="radio" name="situacion" value="hogar"> Me dedico principalmente al hogar y la familia</label>
+    <label class="ro"><input type="radio" name="situacion" value="jubilada"> Estoy jubilada o retirada</label>
+    <label class="ro"><input type="radio" name="situacion" value="otra_sit"> Otra</label>
+  </div>
+  <button class="btn" onclick="valS3()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S4: SÍNTOMA PRINCIPAL -->
+<div class="step" id="s4">
+  <button class="btn-bk" onclick="go(3)">← Atrás</button>
+  <div class="tag">Paso 4 de 13</div>
+  <div class="stit">¿Cuál es el síntoma que más afecta tu calidad de vida hoy?</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="sintoma1" value="sueno"> No duermo bien</label>
+    <label class="ro"><input type="radio" name="sintoma1" value="ansiedad"> Ansiedad o irritabilidad</label>
+    <label class="ro"><input type="radio" name="sintoma1" value="inflamacion"> Inflamación abdominal</label>
+    <label class="ro"><input type="radio" name="sintoma1" value="antojos"> Antojos de azúcar</label>
+    <label class="ro"><input type="radio" name="sintoma1" value="energia"> Falta de energía</label>
+    <label class="ro"><input type="radio" name="sintoma1" value="sofocos"> Sofocos o sudores nocturnos</label>
+    <label class="ro"><input type="radio" name="sintoma1" value="peso"> Aumento de peso</label>
+    <label class="ro"><input type="radio" name="sintoma1" value="dolor_articular"> Dolor articular</label>
+    <label class="ro"><input type="radio" name="sintoma1" value="digestivos"> Problemas digestivos</label>
+    <label class="ro"><input type="radio" name="sintoma1" value="otro_sint"> Otro</label>
+  </div>
+  <button class="btn" onclick="valS4()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S5: SEGUNDO SÍNTOMA -->
+<div class="step" id="s5">
+  <button class="btn-bk" onclick="go(4)">← Atrás</button>
+  <div class="tag">Paso 5 de 13</div>
+  <div class="stit">¿Cuál es el segundo síntoma que más te gustaría resolver?</div>
+  <div class="ssub">Diferente al que elegiste antes.</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="sintoma2" value="sueno"> No duermo bien</label>
+    <label class="ro"><input type="radio" name="sintoma2" value="ansiedad"> Ansiedad o irritabilidad</label>
+    <label class="ro"><input type="radio" name="sintoma2" value="inflamacion"> Inflamación abdominal</label>
+    <label class="ro"><input type="radio" name="sintoma2" value="antojos"> Antojos de azúcar</label>
+    <label class="ro"><input type="radio" name="sintoma2" value="energia"> Falta de energía</label>
+    <label class="ro"><input type="radio" name="sintoma2" value="sofocos"> Sofocos o sudores nocturnos</label>
+    <label class="ro"><input type="radio" name="sintoma2" value="peso"> Aumento de peso</label>
+    <label class="ro"><input type="radio" name="sintoma2" value="dolor_articular"> Dolor articular</label>
+    <label class="ro"><input type="radio" name="sintoma2" value="digestivos"> Problemas digestivos</label>
+    <label class="ro"><input type="radio" name="sintoma2" value="otro_sint2"> Otro</label>
+  </div>
+  <button class="btn" onclick="valS5()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S6: TIEMPO CON EL PROBLEMA -->
+<div class="step" id="s6">
+  <button class="btn-bk" onclick="go(5)">← Atrás</button>
+  <div class="tag">Paso 6 de 13</div>
+  <div class="stit">¿Hace cuánto tiempo este problema afecta tu vida?</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="tiempo_prob" value="menos3m"> Menos de 3 meses</label>
+    <label class="ro"><input type="radio" name="tiempo_prob" value="3a12m"> 3 a 12 meses</label>
+    <label class="ro"><input type="radio" name="tiempo_prob" value="1a3a"> 1 a 3 años</label>
+    <label class="ro"><input type="radio" name="tiempo_prob" value="mas3a"> Más de 3 años</label>
+  </div>
+  <button class="btn" onclick="valS6()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S7: COSTO DEL PROBLEMA -->
+<div class="step" id="s7">
+  <button class="btn-bk" onclick="go(6)">← Atrás</button>
+  <div class="tag">Paso 7 de 13</div>
+  <div class="stit">Si este problema continúa igual durante otro año, ¿qué es lo que más te preocupa?</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="costo_prob" value="dormir_peor"> Dormir peor</label>
+    <label class="ro"><input type="radio" name="costo_prob" value="subir_peso"> Subir más de peso</label>
+    <label class="ro"><input type="radio" name="costo_prob" value="menos_energia"> Tener menos energía</label>
+    <label class="ro"><input type="radio" name="costo_prob" value="mas_ansiosa"> Sentirme más ansiosa</label>
+    <label class="ro"><input type="radio" name="costo_prob" value="mas_medicamentos"> Necesitar más medicamentos</label>
+    <label class="ro"><input type="radio" name="costo_prob" value="no_reconocerme"> No reconocerme</label>
+    <label class="ro"><input type="radio" name="costo_prob" value="afecte_pareja"> Que afecte mi relación de pareja</label>
+    <label class="ro"><input type="radio" name="costo_prob" value="afecte_trabajo"> Que afecte mi trabajo</label>
+    <label class="ro"><input type="radio" name="costo_prob" value="otro_costo"> Otro</label>
+  </div>
+  <button class="btn" onclick="valS7()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S8: QUÉ HA INTENTADO (múltiple) -->
+<div class="step" id="s8">
+  <button class="btn-bk" onclick="go(7)">← Atrás</button>
+  <div class="tag">Paso 8 de 13</div>
+  <div class="stit">¿Qué has intentado para sentirte mejor?</div>
+  <div class="ssub">Puedes marcar varios.</div>
+  <div class="ck-list" id="intentos-list" style="margin-top:16px">
+    <div class="ck-item" data-v="suplementos" onclick="toggleCk(this,'intentos-list')"><div class="ck-box"></div><span class="ck-txt">Suplementos</span></div>
+    <div class="ck-item" data-v="dietas" onclick="toggleCk(this,'intentos-list')"><div class="ck-box"></div><span class="ck-txt">Dietas</span></div>
+    <div class="ck-item" data-v="nutricionista" onclick="toggleCk(this,'intentos-list')"><div class="ck-box"></div><span class="ck-txt">Nutricionista</span></div>
+    <div class="ck-item" data-v="ginecologo" onclick="toggleCk(this,'intentos-list')"><div class="ck-box"></div><span class="ck-txt">Ginecólogo</span></div>
+    <div class="ck-item" data-v="endocrinologo" onclick="toggleCk(this,'intentos-list')"><div class="ck-box"></div><span class="ck-txt">Endocrinólogo</span></div>
+    <div class="ck-item" data-v="hormonas" onclick="toggleCk(this,'intentos-list')"><div class="ck-box"></div><span class="ck-txt">Hormonas / TRH</span></div>
+    <div class="ck-item" data-v="ejercicio" onclick="toggleCk(this,'intentos-list')"><div class="ck-box"></div><span class="ck-txt">Ejercicio</span></div>
+    <div class="ck-item" data-v="terapia" onclick="toggleCk(this,'intentos-list')"><div class="ck-box"></div><span class="ck-txt">Terapia psicológica</span></div>
+    <div class="ck-item" data-v="naturales" onclick="toggleCk(this,'intentos-list')"><div class="ck-box"></div><span class="ck-txt">Remedios naturales</span></div>
+    <div class="ck-item" data-v="nada" onclick="toggleCk(this,'intentos-list')"><div class="ck-box"></div><span class="ck-txt">Nada todavía</span></div>
+  </div>
+  <button class="btn" onclick="valS8()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S9: CUÁNTO HA GASTADO -->
+<div class="step" id="s9">
+  <button class="btn-bk" onclick="go(8)">← Atrás</button>
+  <div class="tag">Paso 9 de 13</div>
+  <div class="stit">Aproximadamente, ¿cuánto has gastado intentando resolver este problema?</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="gasto" value="nada"> Nada</label>
+    <label class="ro"><input type="radio" name="gasto" value="menos100"> Menos de $100 USD</label>
+    <label class="ro"><input type="radio" name="gasto" value="100_500"> $100–$500 USD</label>
+    <label class="ro"><input type="radio" name="gasto" value="500_1000"> $500–$1,000 USD</label>
+    <label class="ro"><input type="radio" name="gasto" value="mas1000"> Más de $1,000 USD</label>
+  </div>
+  <button class="btn" onclick="valS9()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S10: DETONANTE -->
+<div class="step" id="s10">
+  <button class="btn-bk" onclick="go(9)">← Atrás</button>
+  <div class="tag">Paso 10 de 13</div>
+  <div class="stit">¿Qué fue lo que te hizo buscar ayuda justamente ahora?</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="detonante" value="empeoraron"> Los síntomas empeoraron</label>
+    <label class="ro"><input type="radio" name="detonante" value="sin_sueno"> Ya no estoy durmiendo bien</label>
+    <label class="ro"><input type="radio" name="detonante" value="ansiedad_aumento"> Mi ansiedad aumentó</label>
+    <label class="ro"><input type="radio" name="detonante" value="subi_peso"> Subí de peso</label>
+    <label class="ro"><input type="radio" name="detonante" value="medico_normal"> Mi médico me dijo que era normal</label>
+    <label class="ro"><input type="radio" name="detonante" value="vi_info"> Vi información que me hizo reflexionar</label>
+    <label class="ro"><input type="radio" name="detonante" value="amiga"> Una amiga me recomendó buscar ayuda</label>
+    <label class="ro"><input type="radio" name="detonante" value="no_puedo_seguir"> Siento que ya no puedo seguir igual</label>
+    <label class="ro"><input type="radio" name="detonante" value="otro_det"> Otro</label>
+  </div>
+  <button class="btn" onclick="valS10()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S11: MARIANISMO / PRIORIDADES -->
+<div class="step" id="s11">
+  <button class="btn-bk" onclick="go(10)">← Atrás</button>
+  <div class="tag">Paso 11 de 13</div>
+  <div class="stit">¿Cuál de estas frases se parece más a ti?</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="marianismo" value="cuesta_priorizarme"> Me cuesta priorizarme cuando otros me necesitan</label>
+    <label class="ro"><input type="radio" name="marianismo" value="familia_primero"> Suelo poner las necesidades de mi familia antes que las mías</label>
+    <label class="ro"><input type="radio" name="marianismo" value="culpa_dinero"> Me siento culpable cuando gasto dinero en mí</label>
+    <label class="ro"><input type="radio" name="marianismo" value="cuido_otros"> Me resulta más fácil cuidar a otros que cuidarme a mí</label>
+    <label class="ro"><input type="radio" name="marianismo" value="ninguna"> No me identifico con ninguna</label>
+  </div>
+  <button class="btn" onclick="valS11()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S12: QUÉ ES LO MÁS DIFÍCIL -->
+<div class="step" id="s12">
+  <button class="btn-bk" onclick="go(11)">← Atrás</button>
+  <div class="tag">Paso 12 de 13</div>
+  <div class="stit">¿Qué es lo más difícil para ti en este momento?</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="dificil" value="encontrar_tiempo"> Encontrar tiempo para mí</label>
+    <label class="ro"><input type="radio" name="dificil" value="tener_energia"> Tener energía durante el día</label>
+    <label class="ro"><input type="radio" name="dificil" value="ser_constante"> Ser constante</label>
+    <label class="ro"><input type="radio" name="dificil" value="saber_que_hacer"> Saber qué hacer</label>
+    <label class="ro"><input type="radio" name="dificil" value="dejar_culpa"> Dejar de sentirme culpable</label>
+    <label class="ro"><input type="radio" name="dificil" value="mantener_habitos"> Mantener hábitos saludables</label>
+  </div>
+  <button class="btn" onclick="valS12()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S13: PREGUNTA DE ORO -->
+<div class="step" id="s13">
+  <button class="btn-bk" onclick="go(12)">← Atrás</button>
+  <div class="tag">Paso 13 de 13</div>
+  <div class="stit">Completa esta frase:</div>
+  <div style="background:var(--su);border-left:3px solid var(--t);border-radius:0 7px 7px 0;padding:13px 15px;margin:16px 0;font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--c);line-height:1.6;font-style:italic">"Si pudiera resolver __________ en los próximos 30 días, sentiría que voy por buen camino."</div>
+  <textarea class="fta" id="f-problema30" placeholder="Escribe con tus propias palabras..." minlength="3" style="min-height:90px"></textarea>
+  <div style="font-size:10px;color:var(--g);margin-top:4px">Mínimo 3 caracteres.</div>
+  <button class="btn" onclick="valS13()" style="margin-top:16px">Continuar →</button>
+</div>
+
+
+<!-- S14: HÁBITOS DE SALUD -->
+<div class="step" id="s14">
+  <button class="btn-bk" onclick="go(13)">← Atrás</button>
+  <div class="stit">Tus hábitos de salud</div>
+  <div class="ssub">Clave para leer tus síntomas correctamente.</div>
+  <div style="background:var(--su);border-left:3px solid var(--t);border-radius:0 6px 6px 0;padding:10px 13px;margin-bottom:16px">
+    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:11px;color:var(--g);line-height:1.7">
+      <input type="checkbox" id="cb-edu" style="margin-top:2px;accent-color:var(--t);flex-shrink:0" onchange="document.getElementById('btn-s14').disabled=!this.checked">
+      <span>Entiendo que esta evaluación es educativa, no médica, y que mis respuestas se usarán para generar una lectura inicial de síntomas.</span>
+    </label>
+  </div>
+  <div class="fg"><label class="fl">¿Cuánta agua tomas al día?</label>
+    <select class="fs" id="f-agua"><option value="">Selecciona</option><option value="menos1">Menos de 1 litro</option><option value="1a2">Entre 1 y 2 litros</option><option value="mas2">Más de 2 litros</option></select>
+  </div>
+  <div class="fg"><label class="fl">¿Cuántos cafés tomas al día?</label>
+    <select class="fs" id="f-cafe"><option value="">Selecciona</option><option value="0">Ninguno</option><option value="1">1 café</option><option value="2a3">2 a 3 cafés</option><option value="mas3">Más de 3 cafés</option></select>
+  </div>
+  <div class="fg"><label class="fl">Horas de sueño promedio por noche</label>
+    <select class="fs" id="f-sueno"><option value="">Selecciona</option><option value="menos5">Menos de 5 horas</option><option value="5a6">5 a 6 horas</option><option value="7a8">7 a 8 horas</option><option value="mas8_cansada">Más de 8 horas pero me levanto cansada</option></select>
+  </div>
+  <div class="fg"><label class="fl">Nivel de estrés diario (1 bajo — 5 muy alto)</label>
+    <select class="fs" id="f-estres"><option value="">Selecciona</option><option value="1">1 — Bajo</option><option value="2">2 — Leve</option><option value="3">3 — Moderado</option><option value="4">4 — Alto</option><option value="5">5 — Muy alto</option></select>
+  </div>
+  <div class="fg"><label class="fl">¿Cómo está tu ciclo menstrual actualmente?</label>
+    <select class="fs" id="f-ciclo"><option value="">Selecciona</option><option value="regular">Regular (cada 28-32 días)</option><option value="irregular">Irregular</option><option value="ausente_menos1">Sin menstruación hace menos de 1 año</option><option value="ausente_mas1">Sin menstruación hace más de 1 año</option><option value="quirurgica">Menopausia quirúrgica</option></select>
+  </div>
+  <div class="fg"><label class="fl">¿Cuántas veces vas al baño (evacuación) al día?</label>
+    <select class="fs" id="f-bano"><option value="">Selecciona</option><option value="menos1">Menos de 1 vez</option><option value="1">1 vez</option><option value="2a3">2 a 3 veces</option><option value="mas3">Más de 3 veces</option></select>
+  </div>
+  <div class="fg"><label class="fl">¿Cómo son tus evacuaciones habitualmente?</label>
+    <select class="fs" id="f-evac"><option value="">Selecciona</option><option value="normales">Normales / formadas</option><option value="duras">Duras o con esfuerzo</option><option value="sueltas">Sueltas o líquidas</option><option value="variables">Variables</option></select>
+  </div>
+  <button class="btn" id="btn-s14" onclick="valS14()" disabled>Continuar →</button>
+</div>
+
+<!-- S4-S9: SÍNTOMAS (generados por JS) -->
+<div class="step" id="s15"><button class="btn-bk" onclick="go(14)">← Atrás</button><div id="c15"></div></div>
+<div class="step" id="s16"><button class="btn-bk" onclick="go(15)">← Atrás</button><div id="c16"></div></div>
+<div class="step" id="s17"><button class="btn-bk" onclick="go(16)">← Atrás</button><div id="c17"></div></div>
+<div class="step" id="s18"><button class="btn-bk" onclick="go(17)">← Atrás</button><div id="c18"></div></div>
+<div class="step" id="s19"><button class="btn-bk" onclick="go(18)">← Atrás</button><div id="c19"></div></div>
+<div class="step" id="s20"><button class="btn-bk" onclick="go(19)">← Atrás</button><div id="c20"></div></div>
+
+<!-- S10: TRIAJE + CONSENTIMIENTO -->
+<div class="step" id="s21">
+  <button class="btn-bk" onclick="go(20)">← Atrás</button>
+  <div class="tr-box">
+    <div class="tr-tit">Antes de ver tu lectura</div>
+    <div class="tr-sub">Necesito hacerte unas preguntas para asegurarme de que este espacio es el adecuado para ti.</div>
+    <label class="rl" style="margin-top:0">¿Estás actualmente en tratamiento activo por cáncer?</label>
+    <div class="ro-g"><label class="ro"><input type="radio" name="tcancer" value="no"> No</label><label class="ro"><input type="radio" name="tcancer" value="si"> Sí</label></div>
+    <label class="rl">¿Estás embarazada o en período de lactancia activa?</label>
+    <div class="ro-g">
+      <label class="ro"><input type="radio" name="tembarazo" value="no"> No</label>
+      <label class="ro"><input type="radio" name="tembarazo" value="si"> Sí</label>
+    </div>
+    <label class="rl">¿Tienes insuficiencia renal diagnosticada?</label>
+    <div class="ro-g">
+      <label class="ro"><input type="radio" name="trenal" value="no"> No</label>
+      <label class="ro"><input type="radio" name="trenal" value="si"> Sí</label>
+    </div>
+    <label class="rl">¿Estás tomando algún medicamento psiquiátrico actualmente?</label>
+    <div class="ro-g">
+      <label class="ro"><input type="radio" name="tpsiq" value="no" onchange="togglePsiq()"> No</label>
+      <label class="ro"><input type="radio" name="tpsiq" value="si" onchange="togglePsiq()"> Sí</label>
+    </div>
+    <div id="psiq-detalle" style="display:none;margin-top:6px">
+      <label class="fl">¿Cuál o cuáles? (nombre del medicamento)</label>
+      <input class="fi" type="text" id="f-psiq-med" placeholder="Ej: Sertralina, Alprazolam...">
+    </div>
+    <label class="rl">En las últimas 2 semanas, ¿has tenido pensamientos de no querer estar aquí o de hacerte daño?</label>
+    <div class="ro-g">
+      <label class="ro"><input type="radio" name="tcrisis" value="no"> No</label>
+      <label class="ro"><input type="radio" name="tcrisis" value="aveces"> A veces</label>
+      <label class="ro"><input type="radio" name="tcrisis" value="si"> Sí, casi todos los días</label>
+    </div>
+    <label class="rl">¿Tienes antecedentes familiares de cáncer hormonal (mama, ovario, útero)?</label>
+    <div class="ro-g" style="margin-bottom:0">
+      <label class="ro"><input type="radio" name="tantfam" value="no"> No</label>
+      <label class="ro"><input type="radio" name="tantfam" value="si"> Sí</label>
+      <label class="ro"><input type="radio" name="tantfam" value="nose"> No sé</label>
+    </div>
+  </div>
+  <div class="salida s-crisis" id="sal-crisis">
+    <div class="s-icon">💙</div>
+    <div class="s-tit">Gracias por responder con honestidad</div>
+    <div style="font-size:12px;color:var(--c);line-height:1.85">Gracias por responder con honestidad.<br><br>Por lo que compartes, este momento requiere acompañamiento médico, emocional o profesional directo, según tu caso. Por responsabilidad, esta evaluación educativa no es el espacio adecuado para darte una lectura personalizada de síntomas.<br><br>Esta herramienta no reemplaza atención médica, psicológica, psiquiátrica ni de urgencias. Si estás en tratamiento, tienes un diagnóstico activo, estás embarazada o en lactancia, o estás atravesando un momento emocional difícil, te recomiendo hablar con tu médico, especialista tratante o un servicio profesional de apoyo en tu país.<br><br>Si sientes que puedes hacerte daño o que no estás segura, busca ayuda inmediata con una persona de confianza, servicios de emergencia o una línea de crisis local.<br><br>Gracias por cuidar tu salud con seriedad.</div>
+  </div>
+  <div class="salida s-fuera" id="sal-fuera">
+    <div class="s-icon">🌿</div>
+    <div class="s-tit">Gracias por responder con honestidad</div>
+    <div style="font-size:12px;color:var(--c);line-height:1.85">Gracias por responder con honestidad.<br><br>Por lo que compartes, este momento requiere acompañamiento médico, emocional o profesional directo, según tu caso. Por responsabilidad, esta evaluación educativa no es el espacio adecuado para darte una lectura personalizada de síntomas.<br><br>Esta herramienta no reemplaza atención médica, psicológica, psiquiátrica ni de urgencias. Si estás en tratamiento, tienes un diagnóstico activo, estás embarazada o en lactancia, o estás atravesando un momento emocional difícil, te recomiendo hablar con tu médico, especialista tratante o un servicio profesional de apoyo en tu país.<br><br>Si sientes que puedes hacerte daño o que no estás segura, busca ayuda inmediata con una persona de confianza, servicios de emergencia o una línea de crisis local.<br><br>Gracias por cuidar tu salud con seriedad.</div>
+  </div>
+  <div id="con-area" style="display:none">
+    <div class="con-box">
+      <div class="con-tit">Este espacio y sus límites</div>
+      <div class="con-txt">Carolina Marino es Holistic Nutritional Consultant. No es médico.<br><br>Esta lectura de síntomas es un recurso educativo sobre nutrición holística. No constituye diagnóstico, pronóstico, tratamiento ni prescripción médica. No reemplaza la atención médica.</div>
+      <label class="con-row"><input type="checkbox" id="ccb" onchange="toggleCon()"><span class="con-lbl">Entiendo que Carolina Marino no es médico y que esta lectura es educativa. No constituye diagnóstico ni tratamiento médico. Acepto voluntariamente.</span></label>
+    </div>
+    <button class="btn" id="btn-ver" onclick="calcular()" disabled>Ver lo que está hablando mi cuerpo →</button>
+  </div>
+  <div class="hint" id="tr-hint">Responde todas las preguntas para continuar.</div>
+</div>
+
+<!-- GATE: CAPTURA ANTES DE RESULTADOS -->
+<div class="step" id="s22">
+  <button class="btn-bk" onclick="go(21)">← Atrás</button>
+  <div class="r-tag">Ya casi</div>
+  <div class="stit">¿Cómo prefieres aprender?</div>
+  <div class="ssub" style="margin-bottom:16px">Puedes marcar varios.</div>
+  <div class="ck-list" id="formato-list">
+    <div class="ck-item" data-v="guias_pdf" onclick="toggleCk(this,'formato-list')"><div class="ck-box"></div><span class="ck-txt">Guías PDF</span></div>
+    <div class="ck-item" data-v="videos_cortos" onclick="toggleCk(this,'formato-list')"><div class="ck-box"></div><span class="ck-txt">Videos cortos</span></div>
+    <div class="ck-item" data-v="audios" onclick="toggleCk(this,'formato-list')"><div class="ck-box"></div><span class="ck-txt">Audios</span></div>
+    <div class="ck-item" data-v="comunidad" onclick="toggleCk(this,'formato-list')"><div class="ck-box"></div><span class="ck-txt">Comunidad privada</span></div>
+    <div class="ck-item" data-v="sesiones_grupales" onclick="toggleCk(this,'formato-list')"><div class="ck-box"></div><span class="ck-txt">Sesiones grupales</span></div>
+    <div class="ck-item" data-v="sesiones_individuales" onclick="toggleCk(this,'formato-list')"><div class="ck-box"></div><span class="ck-txt">Sesiones individuales</span></div>
+  </div>
+  <button class="btn" onclick="valS22()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S23: QUÉ PROBARÍAS PRIMERO -->
+<div class="step" id="s23">
+  <button class="btn-bk" onclick="go(22)">← Atrás</button>
+  <div class="stit">Si decidieras empezar por algo pequeño, ¿qué probarías primero?</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="producto1" value="reto_21"> Reto 21 días acompañado</label>
+    <label class="ro"><input type="radio" name="producto1" value="taller"> Taller en vivo</label>
+    <label class="ro"><input type="radio" name="producto1" value="mini_curso"> Mini curso</label>
+    <label class="ro"><input type="radio" name="producto1" value="membresia"> Comunidad mensual</label>
+    <label class="ro"><input type="radio" name="producto1" value="programa_completo"> Programa completo</label>
+    <label class="ro"><input type="radio" name="producto1" value="consulta_privada"> Consulta privada</label>
+  </div>
+  <button class="btn" onclick="valS23()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S24: INVERSIÓN MENSUAL -->
+<div class="step" id="s24">
+  <button class="btn-bk" onclick="go(23)">← Atrás</button>
+  <div class="stit">Si encontraras una solución que realmente se adapte a tu situación, ¿qué inversión mensual considerarías razonable?</div>
+  <div class="ro-g" style="margin-top:16px">
+    <label class="ro"><input type="radio" name="inversion_mensual2" value="menos20"> Menos de $20 USD</label>
+    <label class="ro"><input type="radio" name="inversion_mensual2" value="20_50"> $20–$50 USD</label>
+    <label class="ro"><input type="radio" name="inversion_mensual2" value="50_100"> $50–$100 USD</label>
+    <label class="ro"><input type="radio" name="inversion_mensual2" value="100_200"> $100–$200 USD</label>
+    <label class="ro"><input type="radio" name="inversion_mensual2" value="mas200"> Más de $200 USD</label>
+  </div>
+  <button class="btn" onclick="valS24()" style="margin-top:16px">Ver mis resultados →</button>
+</div>
+
+<div class="step" id="s-gate">
+  <button class="btn-bk" onclick="go(24)">← Atrás</button>
+  <div class="r-tag">Tu análisis está listo</div>
+  <div class="h1" style="font-size:24px;margin-bottom:10px">Recibe tu lectura completa</div>
+  <div class="lead" style="margin-bottom:20px">Tus resultados ya están listos. Déjanos estos datos para mostrarte tu lectura completa, guardarla en el registro y enviarte el seguimiento de tu ruta recomendada.</div>
+  <div class="fg"><label class="fl">Nombre *</label><input class="fi" type="text" id="g-nombre" placeholder="Tu nombre"></div>
+  <div class="fg"><label class="fl">Correo electrónico *</label><input class="fi" type="email" id="g-email" placeholder="tu@correo.com"><div style="font-size:10px;color:var(--g);margin-top:4px">Para enviarte una copia de tu lectura y tu siguiente paso recomendado.</div></div>
+  <div class="priv">🔒 Usaremos tus datos solo para tu lectura, tu ruta recomendada y mensajes relacionados con este proceso. No compartimos tu información.</div>
+  <button class="btn" onclick="valGate()">Ver mi lectura completa →</button>
+</div>
+
+
+<!-- S-NEEDS: PREGUNTA DE NECESIDAD -->
+<div class="step" id="s-needs">
+  <button class="btn-bk" onclick="go(21)">← Atrás</button>
+  <div class="stit" style="font-size:17px;line-height:1.4">¿Cuál de estas opciones te haría decir: "esto es exactamente lo que necesito ahora"?</div>
+  <div class="ro-g" style="margin-top:18px">
+    <label class="ro"><input type="radio" name="necesidad" value="entender_cuerpo"> Entender qué le pasa a mi cuerpo y por dónde empezar.</label>
+    <label class="ro"><input type="radio" name="necesidad" value="dormir_energia"> Dormir mejor y despertar con más energía.</label>
+    <label class="ro"><input type="radio" name="necesidad" value="desinflamar"> Desinflamar mi barriga y sentirme más liviana.</label>
+    <label class="ro"><input type="radio" name="necesidad" value="calmar_ansiedad"> Calmar la ansiedad, las palpitaciones y la irritabilidad.</label>
+    <label class="ro"><input type="radio" name="necesidad" value="bajar_peso"> Bajar de peso sin seguir probando dietas al azar.</label>
+    <label class="ro"><input type="radio" name="necesidad" value="ordenar_hormonas"> Ordenar mis hormonas después de los 40.</label>
+  </div>
+  <button class="btn" onclick="valSNeeds()" style="margin-top:16px">Continuar →</button>
+</div>
+
+<!-- S22: CÓMO PREFIERES APRENDER -->
+<!-- LOADING -->
+<div class="loading" id="loading">
+  <div class="spin"></div>
+  <div class="ld-tit">Leyendo las señales de tu cuerpo</div>
+  <div class="ld-sub">Analizando los 6 sistemas...</div>
+</div>
+
+<!-- S25: RESULTADOS -->
+<div class="step" id="s25">
+
+  <!-- 1. Encabezado -->
+  <div class="r-tag">Señales detectadas</div>
+  <div class="r-tit" id="r-nombre"></div>
+  <div class="r-sub">Este es tu mapa visual inicial. Mientras más sistemas aparezcan en atención media o alta, más importante es dejar de improvisar y empezar con una ruta guiada.</div>
+  <div class="u-ban" id="u-ban"></div>
+
+  <!-- 2. Sistema dominante + barras -->
+  <div class="bars" id="bars"></div>
+
+  <!-- 3. Explicación completa: se envía por correo para no cortar la decisión de compra -->
+  <div class="pat-box" id="dom-exp-box" style="display:none">
+    <div class="pat-tit" id="dom-exp-tit"></div>
+    <div class="pat-txt" id="dom-exp-txt"></div>
+  </div>
+
+  <!-- 4. Qué significa y qué no significa -->
+  <div class="pat-box" id="pat-box-resumen" style="display:none">
+    <div class="pat-tit" id="pat-tit"></div>
+    <div class="pat-txt" id="pat-txt"></div>
+  </div>
+
+  <!-- 5. Patrón completo -->
+  <div style="background:var(--su);border-left:3px solid var(--t);border-radius:0 7px 7px 0;padding:13px 15px;margin-bottom:18px;display:none">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--c);margin-bottom:7px">Tus síntomas no están desconectados</div>
+    <div style="font-size:12px;color:var(--g);line-height:1.75">Hormonas, sueño, digestión, metabolismo, ánimo y estrés se conectan entre sí. El estrés sostenido puede aumentar la demanda de minerales como el magnesio, afectar el sueño y hacer que los síntomas se sientan más intensos.<br><br>Por eso un solo síntoma no siempre explica cómo te sientes. El cuerpo muestra patrones, no síntomas aislados.</div>
+  </div>
+
+  <div style="background:#fff;border:1.5px solid var(--cr);border-radius:8px;padding:13px 15px;margin-bottom:18px">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--c);margin-bottom:7px">La explicación completa va a tu correo</div>
+    <div style="font-size:12px;color:var(--g);line-height:1.75">En pantalla ves la gráfica y tu ruta recomendada. En tu correo recibirás la explicación de lo que puede estar conectando tus señales; aquí lo importante es decidir si sigues observando o empiezas acompañada.</div>
+  </div>
+
+  <!-- 6. Puente antes de la CTA -->
+  <div style="background:rgba(139,60,11,.06);border-left:3px solid var(--t);border-radius:0 7px 7px 0;padding:13px 15px;margin-bottom:18px">
+    <div id="puente-cierre" style="font-size:12px;color:var(--c);line-height:1.85">Entender lo que te pasa es solo el primer paso.<br><br>Si quieres saber cómo se conecta todo en tu caso específico y por dónde empezar sin seguir adivinando, el siguiente paso es entrar a una ruta recomendada según tu momento.</div>
+  </div>
+
+  <!-- 8. Oferta principal -->
+  <div class="cta" id="cta-pagada">
+    <div class="cta-tit" id="cta-tit">Tu siguiente paso recomendado: Reto 21 Días Juntas</div>
+    <div class="cta-sub" id="cta-sub">Durante 21 días lo hacemos juntas por WhatsApp y comunidad para empezar a ordenar energía, sueño, ansiedad, inflamación y digestión.</div>
+    <div class="offer-signal">
+      <div class="signal-k">Por qué te recomiendo empezar aquí</div>
+      <div class="signal-t">No necesitas hacerlo perfecto. Necesitas un primer camino claro.</div>
+      <div class="signal-p">Tu lectura muestra señales que se repiten en energía, sueño, ansiedad, inflamación o digestión. El Reto existe para que dejes de adivinar y empieces con pasos diarios sostenibles.</div>
+    </div>
+    <div class="value-row">
+      <div class="value-card"><div class="value-n">21</div><div class="value-l">días juntas</div></div>
+      <div class="value-card"><div class="value-n">5</div><div class="value-l">señales medidas</div></div>
+      <div class="value-card"><div class="value-n">20</div><div class="value-l">cupos fundador</div></div>
+    </div>
+    <div class="cta-lo" id="cta-lo">
+      <p>Acompañamiento por WhatsApp durante 21 días</p>
+      <p>Acceso a comunidad/grupo después del pago</p>
+      <p>Actividades diarias simples</p>
+      <p>Score inicial y final de 5 señales</p>
+      <p>Premio sorpresa para una participante comprometida</p>
+    </div>
+    <div class="proof-box">
+      <div class="proof-k">Lo que otras mujeres suelen reportar cuando empiezan a ordenar sus señales</div>
+      <div class="proof-q">“No era falta de fuerza de voluntad. Necesitaba saber qué hacer primero y sentirme acompañada.”</div>
+      <div class="proof-grid">
+        <div class="proof-mini">Más claridad sobre qué les está pasando</div>
+        <div class="proof-mini">Menos sensación de hacerlo solas</div>
+        <div class="proof-mini">Mejor observación de sueño, energía e inflamación</div>
+        <div class="proof-mini">Más constancia porque hay seguimiento</div>
+      </div>
+    </div>
+    <div class="why-box">
+      <div class="why-t">Por qué este reto es distinto</div>
+      <p>No te entrego información para que la guardes. Durante 21 días tienes una estructura diaria, comunidad y recordatorios para empezar a actuar aunque tengas poco tiempo o poca energía.</p>
+    </div>
+    <div class="fit-box">
+      <div class="fit-t">Este reto es para ti si</div>
+      <div class="fit-row"><strong>✓</strong> Sientes que tu cuerpo cambió y quieres entender por dónde empezar.</div>
+      <div class="fit-row"><strong>✓</strong> Te cuesta sostener hábitos cuando estás cansada o inflamada.</div>
+      <div class="fit-row"><strong>✓</strong> Prefieres acompañamiento y comunidad antes que otro PDF solitario.</div>
+    </div>
+    <div class="urg-price" id="cta-urgency">
+      <div class="urg-price-t" id="urgency-text">Precio fundador disponible por tiempo limitado.</div>
+      <div class="count-row" id="countdown">
+        <div class="count-box"><div class="count-num" id="cd-mins">--</div><div class="count-lbl">min</div></div>
+        <div class="count-box"><div class="count-num" id="cd-secs">--</div><div class="count-lbl">seg</div></div>
+      </div>
+    </div>
+    <div class="pr-row"><span class="p-old" id="cta-old">Regular $47</span><span class="p-new" id="cta-new">$27 USD</span></div>
+    <span class="sc" id="cta-sc">Precio fundador para entrar al Reto. Tu cupo se reserva al completar el pago.</span>
+    <button class="btn-cta" id="cta-btn" onclick="abrirRuta()">Reservar mi cupo fundador ahora →</button>
+    <div class="cta-note" id="cta-note">Después del pago recibirás por correo los próximos pasos para entrar al grupo de WhatsApp/comunidad.</div>
+    <div class="trust-note">Compra segura por Stripe. Esta experiencia es educativa y no reemplaza atención médica; está diseñada para ayudarte a ordenar hábitos y señales con acompañamiento.</div>
+  </div>
+
+  <!-- 9. Aviso legal -->
+  <div class="disc">Carolina Marino · Holistic Nutritional Consultant · Esta lectura es educativa e informativa. No constituye diagnóstico, tratamiento médico ni reemplaza la atención de un profesional de la salud. Si tienes síntomas intensos, diagnóstico médico activo o dudas clínicas, consulta con tu médico tratante.</div>
+</div>
+
+<!-- SALIDA CUPOS -->
+<div class="step" id="s-out">
+  <div class="out-wrap">
+    <div class="out-icon">🌿</div>
+    <div class="out-tit" id="out-tit">Gracias por tu honestidad</div>
+    <div class="out-txt" id="out-txt">Ya tenemos tu información. Si decides avanzar, el siguiente paso es entrar al Reto o elegir una ruta personalizada cuando esté disponible para tu caso.</div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- Config inyectada en runtime por el contenedor (envsubst → config.js). Si el archivo se abre directo, config.js no existe y se usa el valor por defecto del código. -->
+<script src="config.js"></script>
+<script>
+const WEBHOOK_URL = (window.APP_CONFIG && window.APP_CONFIG.WEBHOOK_URL) || 'https://n8n.caronutriholistica.tech/webhook/fcfad32f-13a7-4148-b2db-e9af457ba77d';
+const OFFER_DURATION_MS = 10 * 60 * 1000;
+const CUPOS_FUNDADOR = 20;
+const TOTAL = 25;
+const D = {}; // datos contacto
+const SC = {}; // symptom scores
+let introCnt = 0;
+let offerDeadline = null;
+
+// ── IDENTIDAD POR QUERYSTRING (los nombres coinciden con los campos del payload) ──
+(function(){
+  const q = new URLSearchParams(location.search);
+  D.userId         = q.get('userId') || '';
+  D.sourcePlatform = q.get('sourcePlatform') || '';
+  D.channel        = q.get('channel') || 'whatsapp';
+})();
+
+// ── SISTEMAS ──
+const SYS = [
+  {step:15,key:'hormonal',label:'Sistema 1 de 6',tit:'Síntomas vasomotores y hormonales',
+   sub:'Evalúa cada síntoma en los últimos 30 días. 0 = no lo tengo · 3 = severo',
+   sx:['Sofocos o calores repentinos de día','Sudores nocturnos que me despiertan',
+       'Palpitaciones sin causa cardíaca confirmada','Ciclo irregular o muy diferente a antes',
+       'Pérdida de libido o sequedad vaginal','Senos sensibles o hinchados sin razón',
+       'Irritabilidad nueva que no reconozco en mí','Nerviosismo antes del período o sin razón'],
+   factor:8,
+   txt:{v:'Sin alerta principal aquí, pero conviene sostener la base.',
+        a:'Hay señales hormonales que no conviene dejar avanzar sin orden.',
+        r:'Este sistema aparece como una prioridad: puede estar influyendo en sueño, ánimo y energía.'}},
+  {step:16,key:'cortisol',label:'Sistema 2 de 6',tit:'Sueño y sistema nervioso',
+   sub:'Marca la intensidad de cada señal en los últimos 30 días.',
+   sx:['Me despierto entre las 2 y 4am sin poder volver a dormir',
+       'Me levanto cansada aunque dormí suficientes horas',
+       'Dificultad para quedarme dormida','Ansiedad sin razón clara',
+       'Energía alta en la noche, baja en la mañana','Fatiga que no mejora aunque duerma',
+       'Dificultad para relajarme o desconectarme','Sensación de alerta sin peligro real'],
+   factor:3,
+   txt:{v:'Sin alerta principal aquí, pero el descanso debe protegerse.',
+        a:'Tu sistema nervioso ya muestra carga: esto puede afectar sueño, ansiedad y paciencia diaria.',
+        r:'Prioridad alta: hay señales de sobrecarga sostenida que pueden mantenerte cansada y en alerta.'}},
+  {step:17,key:'animo',label:'Sistema 3 de 6',tit:'Estado de ánimo y cognitivo',
+   sub:'Marca la intensidad de cada señal en los últimos 30 días.',
+   sx:['Tristeza o ganas de llorar sin razón clara','Cambios de humor que me sorprenden a mí misma',
+       'Más deprimida que de costumbre','Niebla mental o dificultad para concentrarme',
+       'Olvidos frecuentes o memoria que falla','Dificultad para encontrar palabras al hablar',
+       'El estrés me afecta mucho más que antes','Llanto fácil o reacciones emocionales fuertes'],
+   factor:6,
+   txt:{v:'Sin alerta principal aquí, pero tu claridad mental también necesita soporte.',
+        a:'El ánimo y la claridad mental muestran señales que pueden estar conectadas con sueño, estrés y hormonas.',
+        r:'Prioridad alta: no parece solo emocional; puede haber un patrón cuerpo-mente que necesita orden.'}},
+  {step:18,key:'tiroides',label:'Sistema 4 de 6',tit:'Tiroides y metabolismo',
+   sub:'Marca la intensidad de cada señal en los últimos 30 días.',
+   sx:['Fatiga profunda aunque haya dormido','Caída de cabello más de lo normal',
+       'Frío en manos y pies con frecuencia','Niebla mental o dificultad para concentrarme',
+       'Olvidos frecuentes o memoria que falla',
+       'El médico me dijo que estaba bien pero no me siento bien',
+       'El peso no baja aunque me cuide y haga ejercicio','Me levanto lenta y gano energía en la tarde'],
+   factor:2,
+   txt:{v:'Sin alerta principal aquí, pero el metabolismo cambia después de los 40.',
+        a:'Tu metabolismo está dando señales: cansancio y peso estancado no deberían ignorarse.',
+        r:'Prioridad alta: aunque los análisis salgan “bien”, tu cuerpo puede estar pidiendo otro nivel de orden.'}},
+  {step:19,key:'minerales',label:'Sistema 5 de 6',tit:'Minerales y músculo',
+   sub:'Marca la intensidad de cada señal en los últimos 30 días.',
+   sx:['Calambres en piernas o pies, especialmente de noche','Dolor en articulaciones al despertar',
+       'Uñas quebradizas o que crecen lento','Cabello seco o con caída excesiva',
+       'Dolor de cabeza nuevo o más frecuente','Pérdida de masa muscular aunque haga ejercicio',
+       'Manchas blancas en las uñas','Heridas que tardan en sanar'],
+   factor:3,
+   txt:{v:'Sin alerta principal aquí, pero la recuperación debe cuidarse.',
+        a:'Hay señales de desgaste: calambres, dolor o caída de energía pueden necesitar más estructura.',
+        r:'Prioridad alta: tu recuperación puede estar comprometida y eso afecta energía, sueño y constancia.'}},
+  {step:20,key:'digestion',label:'Sistema 6 de 6',tit:'Digestión, azúcar e inflamación',
+   sub:'Marca la intensidad de cada señal en los últimos 30 días.',
+   sx:['Me hincho durante el día aunque coma poco','Gases o eructos frecuentes después de comer',
+       'Bajón de energía a las 3pm','Antojos de dulce o pan después de comer',
+       'Grasa abdominal que no baja aunque me cuide','Tomo suplementos pero no noto diferencia real',
+       'Infecciones urinarias o vaginales frecuentes','Cansancio después de comer'],
+   factor:6,
+   txt:{v:'Sin alerta principal aquí, pero la digestión sigue siendo base de energía.',
+        a:'Tu digestión ya muestra señales: inflamación, antojos o bajones pueden estar conectados.',
+        r:'Prioridad alta: si digestión e inflamación siguen igual, muchos cambios pueden sentirse menos efectivos.'}}
+];
+
+// ── BUILD SYSTEMS ──
+function buildSys() {
+  SYS.forEach(s => {
+    SC[s.key] = new Array(s.sx.length).fill(0);
+    const cont = document.getElementById('c'+s.step);
+    const isLast = s.step === 20;
+    let h = `<div class="sy-tag">${s.label}</div>
+    <div class="sy-tit">${s.tit}</div>
+    <div class="sy-sub">${s.sub}</div>
+    <div class="leg"><span class="le">0 Sin síntoma</span><span class="le">1 Leve</span><span class="le">2 Moderado</span><span class="le">3 Severo</span></div>
+    <div class="sy-list">`;
+    s.sx.forEach((sx,i) => {
+      h += `<div class="sy-row"><div class="sy-txt">${sx}</div><div class="sb-g">
+        ${[0,1,2,3].map(v=>`<button class="sb${v===0?' on':''}" onclick="setSev('${s.key}',${i},${v},this)">${v}</button>`).join('')}
+      </div></div>`;
+    });
+    h += `</div>`;
+    if (isLast) {
+      h += `<div class="sec-div">
+      <div class="sy-tag" style="margin-bottom:12px">Para cerrar esta lectura</div>
+      <label class="rl" style="margin-top:0">¿Cuánto tiempo llevas sintiéndote así?</label>
+      <div class="ro-g">
+        <label class="ro"><input type="radio" name="tiempo" value="menos6"> Menos de 6 meses</label>
+        <label class="ro"><input type="radio" name="tiempo" value="6a12"> Entre 6 meses y 1 año</label>
+        <label class="ro"><input type="radio" name="tiempo" value="1a2"> Entre 1 y 2 años</label>
+        <label class="ro"><input type="radio" name="tiempo" value="mas2"> Más de 2 años</label>
+      </div>
+      <label class="rl">¿Qué has intentado antes para sentirte mejor?</label>
+      <div class="ro-g">
+        <label class="ro"><input type="radio" name="intentado" value="nada"> No he intentado nada todavía</label>
+        <label class="ro"><input type="radio" name="intentado" value="medico"> Fui al médico y me dijeron que estaba bien</label>
+        <label class="ro"><input type="radio" name="intentado" value="suplementos"> Tomé suplementos por cuenta propia</label>
+        <label class="ro"><input type="radio" name="intentado" value="dieta"> Cambié la dieta o probé algún plan</label>
+        <label class="ro"><input type="radio" name="intentado" value="varios"> Varias cosas y ninguna funcionó del todo</label>
+      </div>
+      </div>`;
+    }
+    h += `<button class="btn" onclick="${isLast?'valS20()':'go('+(s.step+1)+')'}" style="margin-top:18px">${isLast?'Continuar →':'Siguiente →'}</button>`;
+    cont.innerHTML = h;
+  });
+  // bind radios
+  document.querySelectorAll('.ro').forEach(el => {
+    el.addEventListener('click', () => {
+      const n = el.querySelector('input')?.name;
+      if (!n) return;
+      document.querySelectorAll(`input[name="${n}"]`).forEach(i => i.closest('.ro').classList.remove('on'));
+      el.classList.add('on');
+    });
+  });
+  // bind triaje
+  document.querySelectorAll('input[name="tcancer"],input[name="tembarazo"],input[name="trenal"],input[name="tpsiq"],input[name="tcrisis"],input[name="tantfam"]').forEach(i => i.addEventListener('change', checkTriaje));
+}
+
+function setSev(key, i, v, btn) {
+  SC[key][i] = v;
+  btn.closest('.sb-g').querySelectorAll('.sb').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+// ── NAVIGATION ──
+function go(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('on'));
+  let el;
+  if (n === 'out')  el = document.getElementById('s-out');
+  else if (n === 'gate') el = document.getElementById('s-gate');
+  else if (n === 'needs') el = document.getElementById('s-needs');
+  else el = document.getElementById('s'+n);
+  if (el) el.classList.add('on');
+  document.getElementById('loading').classList.remove('on');
+  if (typeof n === 'number') document.getElementById('pb').style.width = Math.round((n/TOTAL)*100)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── INTRO CHECKBOXES ──
+function ckIntro(el) {
+  const was = el.classList.contains('on');
+  el.classList.toggle('on');
+  el.querySelector('.ck-box').textContent = was ? '' : '✓';
+  introCnt = was ? Math.max(0,introCnt-1) : introCnt+1;
+  document.getElementById('intro-urg').classList.toggle('on', introCnt >= 2);
+}
+
+function toggleCk(el, listId) {
+  const was = el.classList.contains('on');
+  el.classList.toggle('on');
+  el.querySelector('.ck-box').textContent = was ? '' : '✓';
+}
+
+function toggleOtra(name, boxId, txtId) {
+  const val = document.querySelector(`input[name="${name}"]:checked`)?.value;
+  const box = document.getElementById(boxId);
+  const txt = document.getElementById(txtId);
+  if (box) box.style.display = val === 'otra' ? 'block' : 'none';
+  if (txt && val !== 'otra') txt.value = '';
+}
+
+// ── SALIDAS / FILTROS ──
+
+
+function salir(motivo) {
+  enviarWebhook({
+    userId:         D.userId         || '',
+    sourcePlatform: D.sourcePlatform || '',
+    channel:        D.channel        || 'whatsapp',
+    salida:         motivo,
+    responses:      construirResponses()
+  });
+  // Personalizar mensaje de salida
+  const titulo = document.getElementById('out-tit');
+  const texto  = document.getElementById('out-txt');
+  if (motivo === 'S1_sin_metodo_pago') {
+    titulo.textContent = 'Gracias por tu interés';
+    texto.innerHTML = 'Por ahora este programa puede depender de que tengas una forma de pago activa para completar la inscripción.<br><br>Si encuentras la forma de pagar desde tu país, puedes avanzar con el Reto. Si no, guarda tu lectura y espera la próxima apertura disponible para tu caso.';
+  } else if (motivo === 'S2_no_inversion') {
+    titulo.textContent = 'Gracias por tu honestidad';
+    texto.innerHTML = 'Entiendo perfectamente que hay momentos en que la inversión se piensa dos veces.<br><br>Por eso la ruta de entrada es el Reto 21 Días Juntas: una forma más accesible de empezar acompañada, sin comprometerte todavía con un proceso más largo.';
+  }
+  go('out');
+}
+
+// ── VALIDACIONES ──
+function valS1() {
+  const pais = document.getElementById('f-pais').value;
+  if (!pais) { alert('Por favor selecciona tu país.'); return; }
+  D.pais = pais;
+  if (pais === 'venezuela' || pais === 'cuba') {
+    addTags(['pais_ven_cuba','activar_pago']);
+  }
+  go(2);
+}
+
+function valS2() {
+  D.edad = document.querySelector('input[name="edad"]:checked')?.value||'';
+  if (!D.edad) { alert('Por favor selecciona tu rango de edad.'); return; }
+  go(3);
+}
+
+function valS3() {
+  D.situacion = document.querySelector('input[name="situacion"]:checked')?.value||'';
+  if (!D.situacion) { alert('Por favor selecciona tu situación actual.'); return; }
+  go(4);
+}
+
+function valS4() {
+  D.sintoma1 = document.querySelector('input[name="sintoma1"]:checked')?.value||'';
+  if (!D.sintoma1) { alert('Por favor selecciona tu síntoma principal.'); return; }
+  go(5);
+}
+
+function valS5() {
+  D.sintoma2 = document.querySelector('input[name="sintoma2"]:checked')?.value||'';
+  if (!D.sintoma2) { alert('Por favor selecciona el segundo síntoma.'); return; }
+  go(6);
+}
+
+function valS6() {
+  D.tiempo_prob = document.querySelector('input[name="tiempo_prob"]:checked')?.value||'';
+  if (!D.tiempo_prob) { alert('Por favor indica cuánto tiempo llevas con este problema.'); return; }
+  go(7);
+}
+
+function valS7() {
+  D.costo_prob = document.querySelector('input[name="costo_prob"]:checked')?.value||'';
+  if (!D.costo_prob) { alert('Por favor selecciona lo que más te preocupa.'); return; }
+  go(8);
+}
+
+function valS8() {
+  D.intentos_previos = [...document.querySelectorAll('#intentos-list .ck-item.on')].map(e=>e.dataset.v).join(',');
+  if (!D.intentos_previos) { alert('Por favor selecciona al menos una opción.'); return; }
+  go(9);
+}
+
+function valS9() {
+  D.gasto = document.querySelector('input[name="gasto"]:checked')?.value||'';
+  if (!D.gasto) { alert('Por favor selecciona una opción.'); return; }
+  go(10);
+}
+
+function valS10() {
+  D.detonante = document.querySelector('input[name="detonante"]:checked')?.value||'';
+  if (!D.detonante) { alert('Por favor selecciona qué te hizo buscar ayuda ahora.'); return; }
+  go(11);
+}
+
+function valS11() {
+  D.marianismo = document.querySelector('input[name="marianismo"]:checked')?.value||'';
+  if (!D.marianismo) { alert('Por favor selecciona la frase que más se parece a ti.'); return; }
+  // Tag marianismo
+  if (D.marianismo !== 'ninguna') D.tags = (D.tags?D.tags+',':'') + 'marianismo';
+  go(12);
+}
+
+function valS12() {
+  D.dificil = document.querySelector('input[name="dificil"]:checked')?.value||'';
+  if (!D.dificil) { alert('Por favor selecciona lo más difícil para ti.'); return; }
+  go(13);
+}
+
+function valS13() {
+  D.problema30 = document.getElementById('f-problema30').value.trim();
+  if (!D.problema30 || D.problema30.length < 3) { alert('Por favor cuéntanos qué quieres resolver (mínimo 3 caracteres).'); return; }
+  go(14);
+}
+
+function valSNeeds() {
+  D.necesidad = document.querySelector('input[name="necesidad"]:checked')?.value||'';
+  if (!D.necesidad) { alert('Por favor selecciona la opción que más se acerca a ti.'); return; }
+  go(22);
+}
+
+function valS22() {
+  D.formato_aprender = [...document.querySelectorAll('#formato-list .ck-item.on')].map(e=>e.dataset.v).join(',');
+  if (!D.formato_aprender) { alert('Por favor selecciona al menos una opción.'); return; }
+  go(23);
+}
+
+function valS23() {
+  D.producto1 = document.querySelector('input[name="producto1"]:checked')?.value||'';
+  if (!D.producto1) { alert('Por favor selecciona una opción.'); return; }
+  go(24);
+}
+
+function addTags(tags) {
+  const actuales = (D.tags || '').split(',').filter(Boolean);
+  tags.filter(Boolean).forEach(t => {
+    if (!actuales.includes(t)) actuales.push(t);
+  });
+  D.tags = actuales.join(',');
+}
+
+function valS24() {
+  D.inversion_mensual2 = document.querySelector('input[name="inversion_mensual2"]:checked')?.value||'';
+  if (!D.inversion_mensual2) { alert('Por favor selecciona tu nivel de inversión.'); return; }
+  const tags = [];
+  if (D.inversion_mensual2 === 'menos20') tags.push('baja_inversion_reto');
+  if (D.inversion_mensual2 === '100_200' || D.inversion_mensual2 === 'mas200') tags.push('potencial_high_ticket');
+  if (D.inversion_mensual2 === '20_50' || D.inversion_mensual2 === '50_100') tags.push('potencial_low_medium_ticket');
+  addTags(tags);
+  go('gate');
+}
+
+function valS14() {
+  D.agua  = document.getElementById('f-agua').value;
+  D.cafe  = document.getElementById('f-cafe').value;
+  D.sueno = document.getElementById('f-sueno').value;
+  D.estres= document.getElementById('f-estres').value;
+  D.ciclo = document.getElementById('f-ciclo').value;
+  D.bano  = document.getElementById('f-bano').value;
+  D.evac  = document.getElementById('f-evac').value;
+
+  if (!D.agua)  { alert('Por favor indica cuánta agua tomas al día.'); return; }
+  if (!D.cafe)  { alert('Por favor indica cuántos cafés tomas al día.'); return; }
+  if (!D.sueno) { alert('Por favor indica tus horas de sueño promedio.'); return; }
+  if (!D.estres){ alert('Por favor indica tu nivel de estrés diario.'); return; }
+  if (!D.ciclo) { alert('Por favor indica cómo está tu ciclo menstrual.'); return; }
+  if (!D.bano)  { alert('Por favor indica cuántas veces vas al baño al día.'); return; }
+  if (!D.evac)  { alert('Por favor indica cómo son tus evacuaciones habitualmente.'); return; }
+
+  go(15);
+}
+
+function valS20() {
+  D.tiempo_final = document.querySelector('input[name="tiempo"]:checked')?.value||'';
+  D.intentado_final = document.querySelector('input[name="intentado"]:checked')?.value||'';
+  if (!D.tiempo_final) { alert('Por favor indica cuánto tiempo llevas sintiéndote así.'); return; }
+  if (!D.intentado_final) { alert('Por favor indica qué has intentado antes.'); return; }
+  go(21);
+}
+
+
+// ── TRIAJE ──
+function checkTriaje() {
+  const cancer    = document.querySelector('input[name="tcancer"]:checked')?.value;
+  const embarazo  = document.querySelector('input[name="tembarazo"]:checked')?.value;
+  const renal     = document.querySelector('input[name="trenal"]:checked')?.value;
+  const psiq      = document.querySelector('input[name="tpsiq"]:checked')?.value;
+  const crisis    = document.querySelector('input[name="tcrisis"]:checked')?.value;
+  const antfam    = document.querySelector('input[name="tantfam"]:checked')?.value;
+  const ca   = document.getElementById('con-area');
+  const hint = document.getElementById('tr-hint');
+  const bk   = document.querySelector('#s21 .btn-bk');
+  const sc   = document.getElementById('sal-crisis');
+  const sf   = document.getElementById('sal-fuera');
+  sc.classList.remove('on'); sf.classList.remove('on');
+  ca.style.display = 'none'; hint.style.display = 'block';
+  if (bk) bk.style.display = 'flex';
+  if (crisis === 'aveces' || crisis === 'si') {
+    sc.classList.add('on'); hint.style.display='none';
+    if (bk) bk.style.display='none';
+    setTimeout(()=>sc.scrollIntoView({behavior:'smooth',block:'center'}),100);
+    return;
+  }
+  if (cancer === 'si' || embarazo === 'si' || renal === 'si') {
+    sf.classList.add('on'); hint.style.display='none';
+    if (bk) bk.style.display='none';
+    setTimeout(()=>sf.scrollIntoView({behavior:'smooth',block:'center'}),100);
+    return;
+  }
+  if (cancer && embarazo && renal && psiq && crisis && antfam) {
+    ca.style.display='block'; hint.style.display='none';
+  }
+}
+
+function toggleCon() {
+  document.getElementById('btn-ver').disabled = !document.getElementById('ccb').checked;
+}
+
+// ── INTRO ──
+function valS0() {
+  go(1);
+}
+
+// ── GATE: captura de datos antes de resultados ──
+function valGate() {
+  const nombre   = document.getElementById('g-nombre').value.trim();
+  const email    = document.getElementById('g-email').value.trim();
+  if (!nombre) { alert('Por favor ingresa tu nombre.'); return; }
+  if (!email || !email.includes('@')) { alert('Por favor ingresa un correo válido.'); return; }
+  D.nombre   = nombre;
+  D.email    = email;
+  // Calcular ruta para la pantalla de resultados
+  const nb = D._nb_final || D._nb || {};
+  const niveles = contarNiveles(nb);
+  crearRutaRecomendada(niveles.rojos, niveles.amarillos);
+  // ── Guardar TODAS las respuestas en el webhook de n8n ──
+  enviarWebhook({
+    userId:         D.userId         || '',
+    sourcePlatform: D.sourcePlatform || '',
+    channel:        D.channel        || 'whatsapp',
+    responses:      construirResponses()
+  });
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('on'));
+  document.getElementById('loading').classList.add('on');
+  window.scrollTo({top:0, behavior:'smooth'});
+  setTimeout(()=>{document.getElementById('loading').classList.remove('on'); mostrar(nb); go(25);}, 2400);
+}
+
+// ── CALCULAR ──
+// ── CALCULAR ──
+function calcular() {
+  D.tantfam    = document.querySelector('input[name="tantfam"]:checked')?.value||'';
+  D.tembarazo  = document.querySelector('input[name="tembarazo"]:checked')?.value||'';
+  D.trenal     = document.querySelector('input[name="trenal"]:checked')?.value||'';
+  D.psiq_med   = document.getElementById('f-psiq-med')?.value.trim()||'';
+  D.introItems = [...document.querySelectorAll('#intro-list .ck-item.on')].map(e=>e.dataset.v).join(',');
+  const nb = {};
+  SYS.forEach(s => { nb[s.key] = SC[s.key].reduce((a,b)=>a+b,0) * s.factor; });
+  D._nb = nb;
+  go('needs');
+}
+function lvl(score,max){const p=score/max;return p<=.12?'v':p<=.42?'a':'r';}
+function lbl(l){return l==='v'?'Base estable':l==='a'?'Requiere atención':'Prioridad alta';}
+function cls(l){return 'bdg-'+l;}
+function fillCls(l){return 'fill-'+l;}
+function riskLine(l,pct){return l==='v'?'Nivel de atención: bajo · '+pct+'%':l==='a'?'Nivel de atención: medio · '+pct+'%':'Nivel de atención: alto · '+pct+'%';}
+
+function updateCountdown(){
+  if (!offerDeadline) return;
+  const now = new Date();
+  let diff = offerDeadline - now.getTime();
+  if (diff < 0) diff = 0;
+  const mins = Math.floor(diff / 60000);
+  const secs = Math.floor((diff % 60000) / 1000);
+  const set = (id,val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = String(val).padStart(2,'0');
+  };
+  set('cd-mins', mins);
+  set('cd-secs', secs);
+}
+
+function startOfferCountdown(){
+  offerDeadline = Date.now() + OFFER_DURATION_MS;
+  updateCountdown();
+}
+
+setInterval(updateCountdown,1000);
+
+function contarNiveles(nb) {
+  let rojos = 0, amarillos = 0;
+  SYS.forEach(s => {
+    const score = nb[s.key] || 0;
+    const maxPos = s.sx.length * 3 * s.factor;
+    const l = lvl(score, maxPos);
+    if (l === 'r') rojos++;
+    if (l === 'a') amarillos++;
+  });
+  return { rojos, amarillos };
+}
+
+function escHtml(txt) {
+  return String(txt || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function deseoInterpretado() {
+  const necesidad = {
+    entender_cuerpo: 'entender qué le pasa a tu cuerpo y saber por dónde empezar',
+    dormir_energia: 'dormir mejor y despertar con más energía',
+    desinflamar: 'sentirte más liviana y desinflamada',
+    calmar_ansiedad: 'sentirte más tranquila y con menos ansiedad',
+    bajar_peso: 'bajar de peso sin seguir probando dietas al azar',
+    ordenar_hormonas: 'ordenar tus señales hormonales después de los 40'
+  }[D.necesidad];
+
+  const sintoma = {
+    sueno: 'recuperar noches más reparadoras',
+    ansiedad: 'sentir más calma en tu cuerpo',
+    inflamacion: 'desinflamar tu abdomen y sentirte más cómoda',
+    antojos: 'tener más control sobre antojos y energía',
+    energia: 'volver a tener energía durante el día',
+    sofocos: 'entender y ordenar tus señales hormonales',
+    peso: 'sentir que tu cuerpo vuelve a responder',
+    dolor_articular: 'moverte con más comodidad',
+    digestivos: 'sentir una digestión más liviana'
+  }[D.sintoma1];
+
+  const dificultad = {
+    encontrar_tiempo: 'hacerlo de una forma que sí quepa en tu vida real',
+    tener_energia: 'recuperar energía sin exigirte más de lo que puedes sostener',
+    ser_constante: 'tener una ruta simple que te ayude a ser constante',
+    saber_que_hacer: 'dejar de adivinar y saber qué hacer primero',
+    dejar_culpa: 'cuidarte sin sentir culpa',
+    mantener_habitos: 'mantener hábitos sin empezar de cero cada semana'
+  }[D.dificil];
+
+  const partes = [necesidad, sintoma, dificultad].filter(Boolean);
+  if (!partes.length) return 'sentirte mejor y entender qué necesita tu cuerpo ahora';
+  return partes.slice(0, 2).join(' para ') + (partes[2] ? ', sin perderte en más información suelta' : '');
+}
+
+const LINK_RETO_21 = 'https://buy.stripe.com/28EcN5cZjgdLgxd07waAw07';
+const LINK_PLAN_300 = 'https://buy.stripe.com/8x25kD8J31iR6WDg6uaAw06';
+
+function crearRutaRecomendada(rojos, amarillos) {
+  let score = 0;
+  const razones = [];
+  const detonantesAlta = ['no_puedo_seguir','empeoraron','sin_sueno','medico_normal','ansiedad_aumento'];
+  const gastoMedio = ['100_500','500_1000','mas1000'];
+  const inversionMedia = ['50_100','100_200','mas200'];
+  const productoAlto = ['programa_completo','consulta_privada'];
+  const formato = D.formato_aprender || '';
+
+  if (detonantesAlta.includes(D.detonante)) { score += 20; razones.push('urgencia_actual'); }
+  if (D.tiempo_prob === '1a3a') { score += 10; razones.push('problema_1a3_anios'); }
+  if (D.tiempo_prob === 'mas3a') { score += 15; razones.push('problema_mas3_anios'); }
+  if (gastoMedio.includes(D.gasto)) { score += D.gasto === 'mas1000' ? 25 : 15; razones.push('ya_invirtio_antes'); }
+  if (D.inversion_mensual2 === '20_50') score += 8;
+  if (inversionMedia.includes(D.inversion_mensual2)) score += D.inversion_mensual2 === 'mas200' ? 35 : 18;
+  if (productoAlto.includes(D.producto1)) { score += 22; razones.push('pide_acompanamiento'); }
+  if (D.producto1 === 'membresia' || D.producto1 === 'taller' || D.producto1 === 'mini_curso') score += 8;
+  if (formato.includes('sesiones_individuales')) { score += 12; razones.push('prefiere_individual'); }
+  if (formato.includes('comunidad') || formato.includes('sesiones_grupales')) score += 6;
+  if (D.userId) score += 8;
+  if (rojos >= 3) { score += 18; razones.push('varios_sistemas_activos'); }
+  else if (rojos >= 1 || amarillos >= 3) score += 8;
+
+  const ruta = 'reto_21';
+  if (score >= 45 || D.producto1 === 'programa_completo' || D.producto1 === 'consulta_privada') {
+    razones.push('potencial_plan_300_followup');
+  }
+  if (D.inversion_mensual2 === '50_100' || D.inversion_mensual2 === '100_200' || D.inversion_mensual2 === 'mas200') {
+    razones.push('capacidad_pago_superior');
+  }
+
+  D.lead_score = score;
+  D.ruta_recomendada = ruta;
+  D.cierre_motivo = razones.join(',');
+  addTags(['ruta_'+ruta, score >= 70 ? 'lead_caliente' : score >= 45 ? 'lead_tibio' : 'lead_reto']);
+  return ruta;
+}
+
+function aplicarCierre(ruta) {
+  const puente = document.getElementById('puente-cierre');
+  const tit = document.getElementById('cta-tit');
+  const sub = document.getElementById('cta-sub');
+  const lista = document.getElementById('cta-lo');
+  const viejo = document.getElementById('cta-old');
+  const nuevo = document.getElementById('cta-new');
+  const sc = document.getElementById('cta-sc');
+  const btn = document.getElementById('cta-btn');
+  const note = document.getElementById('cta-note');
+  const urgency = document.getElementById('cta-urgency');
+  const urgencyText = document.getElementById('urgency-text');
+  const deseo = deseoInterpretado();
+  const deseo30 = `<div id="deseo30-cta" style="background:#fffaf4;border:1px solid #ead8ca;border-radius:7px;padding:11px 13px;margin:12px 0 0;color:#3a2118;font-size:12px;line-height:1.65;text-align:left"><strong style="color:#8b3c0b">Lo que tu lectura muestra que estás buscando:</strong><br>${escHtml(deseo)}</div>`;
+
+  const cierres = {
+    reto_21: {
+      puente: 'Por cómo respondiste, no parece que estés buscando más información. Parece que estás buscando ' + escHtml(deseo) + '.<br><br>Y aquí está la diferencia: cuando una mujer ya probó comer mejor, suplementos o consejos sueltos, el problema casi nunca es falta de voluntad. El problema es no tener orden, seguimiento y un primer paso que pueda sostener.',
+      tit: 'Tu siguiente paso recomendado: Reto 21 Días Juntas',
+      sub: 'Empezamos el 6 de julio de 2026. Durante 21 días lo hacemos juntas: conmigo, por WhatsApp y en comunidad. Es una entrada accesible para empezar a ordenar energía, sueño, ansiedad, inflamación y digestión sin hacerlo sola.',
+      items: ['Acompañamiento por WhatsApp durante 21 días','Entrada al grupo/comunidad después del pago','Actividades diarias simples para saber qué hacer cada día','Score inicial y score final de 5 señales: energía, sueño, ansiedad, inflamación y digestión','Recetas, lista de compras e ideas prácticas para aplicar sin complicarte','Premio sorpresa para una participante comprometida'],
+      old: 'Regular $47',
+      price: '$27 USD',
+      urgency: 'Tu precio fundador de $27 queda abierto durante los próximos 10 minutos y solo aplica para los primeros ' + CUPOS_FUNDADOR + ' cupos. El cupo no se aparta por mensaje: se reserva únicamente al completar el pago.',
+      sc: 'Hoy entras por $27. Cuando se cierren los cupos fundador, el precio regular del Reto será $47.',
+      btn: 'Reservar mi cupo fundador ahora',
+      note: 'Después del pago recibes confirmación por correo y los próximos pasos para entrar al grupo de WhatsApp/comunidad. El acompañamiento inicia el 6 de julio de 2026.'
+    },
+    plan_300: {
+      puente: 'Por cómo respondiste, tu deseo no parece ser hacer otra dieta ni probar otro suplemento. Parece que quieres ' + escHtml(deseo) + '.<br><br>Tus respuestas no hablan de un síntoma aislado. Hablan de un patrón que necesita mapa, orden y acompañamiento para saber qué hacer primero y qué dejar de improvisar.',
+      tit: 'Tu ruta recomendada: Vuelve a Sentirte Tú 40+',
+      sub: 'Durante 3 meses trabajas con evaluación, mapa, plan semi personalizado, comunidad y seguimiento para dejar de perseguir síntomas sueltos y medir avances reales en energía, sueño, ansiedad, inflamación y digestión.',
+      items: ['Evaluación de 700 variables al inicio','Mapa NutriBalance 40+ con prioridades por sistema','Plan semi personalizado con recetas, compras e intercambios','Sesión grupal cada 15 días y comunidad privada','Correo de bienvenida con instrucciones y próximos pasos después del pago','Tracking semanal y reporte de progreso al cierre'],
+      old: 'Regular $450',
+      price: '$300 USD',
+      urgency: 'Precio fundador disponible antes del inicio del Reto. Si tu lectura pide más estructura, este es el momento de reservar tu ruta.',
+      sc: 'Precio fundador. Diseñado para mujeres que ya no quieren seguir probando cosas al azar durante otros 3 meses.',
+      btn: 'Quiero que revises mi caso con más profundidad',
+      note: 'Después del pago recibirás confirmación por correo y las instrucciones para iniciar tu evaluación.'
+    },
+    lectura_privada: {
+      puente: 'Por cómo respondiste, tu cuerpo no está pidiendo otro consejo suelto. Está pidiendo una ruta completa para ' + escHtml(deseo) + '.<br><br>La decisión inteligente es tener mapa, acompañamiento y seguimiento para saber qué hacer primero y no seguir gastando energía en intentos al azar.',
+      tit: 'Tu ruta recomendada: Vuelve a Sentirte Tú 40+',
+      sub: 'Durante 3 meses trabajas con evaluación, Mapa NutriBalance 40+, plan semi personalizado, comunidad y seguimiento para medir avances reales en energía, sueño, ansiedad, inflamación y digestión.',
+      items: ['Evaluación de 700 variables al inicio','Mapa NutriBalance 40+ con prioridades por sistema','Plan semi personalizado con recetas, compras e intercambios','Sesión grupal cada 15 días y comunidad privada','Correo de bienvenida con instrucciones y próximos pasos después del pago','Tracking semanal y reporte de progreso al cierre'],
+      old: 'Regular $450',
+      price: '$300 USD',
+      urgency: 'Precio fundador disponible antes del inicio del Reto. Si ya sabes que necesitas mapa y seguimiento, reserva ahora.',
+      sc: 'Precio fundador para mujeres que ya no quieren seguir probando cosas al azar.',
+      btn: 'Quiero que revises mi caso con más profundidad',
+      note: 'Después del pago recibirás confirmación por correo y las instrucciones para iniciar tu evaluación.'
+    }
+  };
+
+  const c = cierres[ruta] || cierres.reto_21;
+  if (puente) puente.innerHTML = c.puente;
+  if (tit) tit.textContent = c.tit;
+  if (sub) sub.textContent = c.sub;
+  const previoDeseo = document.getElementById('deseo30-cta');
+  if (previoDeseo) previoDeseo.remove();
+  if (sub && deseo30) sub.insertAdjacentHTML('afterend', deseo30);
+  if (lista) lista.innerHTML = c.items.map(i => `<p>${i}</p>`).join('');
+  if (viejo) viejo.textContent = c.old;
+  if (nuevo) nuevo.textContent = c.price;
+  if (urgencyText) urgencyText.textContent = c.urgency;
+  if (urgency) urgency.style.display = 'block';
+  startOfferCountdown();
+  if (sc) sc.textContent = c.sc;
+  if (btn) btn.textContent = c.btn + ' →';
+  if (note) note.textContent = c.note;
+}
+
+function abrirRuta() {
+  if (D.ruta_recomendada === 'reto_21') {
+    window.open(LINK_RETO_21,'_blank');
+    return;
+  }
+  window.open(LINK_PLAN_300,'_blank');
+}
+
+function mostrar(nb) {
+  const nombre = D.nombre.split(' ')[0];
+  document.getElementById('r-nombre').textContent = 'Lo que está hablando tu cuerpo, '+nombre;
+  // Banner tiempo
+  const ub = document.getElementById('u-ban');
+  if (D.tiempo_prob==='1a3a'||D.tiempo_prob==='mas3a') {
+    const a=D.tiempo_prob==='mas3a'?'más de 3 años':'entre 1 y 3 años';
+    ub.textContent='Llevas '+a+' con estas señales. Cuando estas señales llevan tiempo presentes, suele ser útil mirar el patrón completo y empezar con pasos ordenados, no con cambios al azar.';
+    ub.classList.add('on');
+  }
+  // Barras
+  const wrap = document.getElementById('bars');
+  wrap.innerHTML='';
+  let rojos=0,amarillos=0;
+  SYS.forEach(s=>{
+    const score=nb[s.key];
+    const maxPos=s.sx.length*3*s.factor;
+    const pct=Math.min(100,Math.round((score/maxPos)*100));
+    const l=lvl(score,maxPos);
+    if(l==='r')rojos++;if(l==='a')amarillos++;
+    const d=document.createElement('div');
+    d.className='b-card '+(l==='r'?'b-card-r':l==='a'?'b-card-a':'');
+    const nombres={hormonal:'Sistema hormonal',cortisol:'Sueño y sistema nervioso',animo:'Ánimo y cognitivo',tiroides:'Tiroides y metabolismo',minerales:'Minerales y músculo',digestion:'Digestión e inflamación'};
+    d.innerHTML=`<div class="b-top"><span class="b-name">${nombres[s.key]}</span><span class="${cls(l)} bdg">${lbl(l)}</span></div>
+    <div class="trk"><div class="${fillCls(l)}" id="fl-${s.key}" style="width:0%"></div></div>
+    <div class="b-risk">${riskLine(l,pct)}</div>
+    <div class="b-desc">${s.txt[l]}</div>`;
+    wrap.appendChild(d);
+    setTimeout(()=>{document.getElementById('fl-'+s.key).style.width=pct+'%';},400);
+  });
+
+  // ── SISTEMA DOMINANTE: explicación solo del sistema con más señales ──
+  const expTextos = {
+    hormonal: {
+      tit: 'Lo que muestra tu sistema hormonal',
+      txt: 'Tu resultado tiene señales relacionadas con cambios hormonales. Esto puede verse en sofocos, sudoración nocturna, irritabilidad, cambios de ciclo, sensibilidad en senos, sequedad vaginal, baja libido o la sensación de no reconocerte como antes.<br><br>En esta etapa, muchas mujeres intentan mirar cada síntoma por separado. Pero el cuerpo suele mostrar un patrón más amplio que no se resuelve atacando un síntoma a la vez.'
+    },
+    cortisol: {
+      tit: 'Lo que muestra tu sueño y sistema nervioso',
+      txt: 'Tu resultado tiene señales relacionadas con sueño, cortisol y sistema nervioso. Esto puede verse en despertares entre las 2 y 4am, ansiedad sin razón clara, dificultad para relajarte, cansancio al despertar o sensación de estar en alerta aunque no haya peligro real.<br><br>Cuando el sistema nervioso lleva tiempo sobrecargado, el cuerpo tiene más dificultad para descansar, digerir bien, regular energía y responder a los cambios hormonales.'
+    },
+    animo: {
+      tit: 'Lo que muestra tu ánimo y claridad mental',
+      txt: 'Tu resultado tiene señales relacionadas con ánimo, memoria y claridad mental. Esto puede verse en tristeza, llanto fácil, cambios de humor, niebla mental, olvidos o dificultad para concentrarte.<br><br>Esto no significa que todo esté en tu cabeza. En muchas mujeres, el ánimo y la claridad mental están conectados con sueño, hormonas, estrés, digestión y energía.'
+    },
+    tiroides: {
+      tit: 'Lo que muestra tu tiroides y metabolismo',
+      txt: 'Tu resultado tiene señales relacionadas con metabolismo y función tiroidea. Esto puede verse en fatiga profunda, frío frecuente, caída de cabello, dificultad para bajar de peso, niebla mental o la sensación de que el cuerpo no responde aunque te cuides.<br><br>Esto no reemplaza análisis médicos. Pero sí muestra que tu cuerpo podría estar pidiendo una mirada más completa del metabolismo, la energía y los hábitos que lo sostienen.'
+    },
+    minerales: {
+      tit: 'Lo que muestran tus minerales y músculo',
+      txt: 'Tu resultado tiene señales relacionadas con recuperación, minerales y tejido muscular. Esto puede verse en calambres, dolor articular, uñas frágiles, caída de cabello, dolor de cabeza, heridas que tardan en sanar o pérdida de masa muscular.<br><br>Cuando el cuerpo lleva tiempo bajo estrés, mal descanso o digestión débil, le cuesta más reponer nutrientes y recuperarse bien.'
+    },
+    digestion: {
+      tit: 'Lo que muestra tu digestión e inflamación',
+      txt: 'Tu resultado tiene señales relacionadas con digestión, inflamación y manejo de azúcar. Esto puede verse en hinchazón, gases, cansancio después de comer, bajón de energía a media tarde, antojos de dulce o grasa abdominal que no responde como antes.<br><br>La digestión no solo tiene que ver con el estómago. También puede influir en energía, inflamación, absorción de nutrientes, piel, ánimo y metabolismo.'
+    }
+  };
+
+  // Calcular sistema dominante (el de mayor porcentaje)
+  let dominantKey = 'hormonal', dominantPct = 0;
+  SYS.forEach(s => {
+    const score = nb[s.key];
+    const maxPos = s.sx.length * 3 * s.factor;
+    const pct = score / maxPos;
+    if (pct > dominantPct) { dominantPct = pct; dominantKey = s.key; }
+  });
+
+  // La explicación larga se entrega por correo; en pantalla dejamos gráfica + oferta.
+  const expBox = document.getElementById('dom-exp-box');
+  if (expBox) expBox.style.display = 'none';
+
+  // Patrón general
+  const pt=document.getElementById('pat-tit');
+  const ptx=document.getElementById('pat-txt');
+  if(rojos>=3){pt.textContent='Qué significa y qué no significa este resultado';ptx.innerHTML='Este resultado no significa que tengas una enfermedad específica. Significa que, dentro de esta lectura educativa, varios sistemas mostraron señales activas al mismo tiempo.<br><br>Cuando el cuerpo habla desde varios frentes a la vez, no se trata de perseguir cada síntoma. Se trata de entender el orden correcto para empezar a trabajar tu caso.';}
+  else if(rojos>=1){pt.textContent='Qué significa y qué no significa este resultado';ptx.innerHTML='Este resultado no significa que tengas una enfermedad específica. Significa que este sistema mostró más señales que los demás y podría estar influyendo en cómo te sientes.<br><br>La información genérica puede decirte qué hacer. No puede decirte por qué eso no te está funcionando a ti específicamente.';}
+  else if(amarillos>=2){pt.textContent='Qué significa y qué no significa este resultado';ptx.innerHTML='Este resultado no significa que algo esté grave. Significa que hay señales en transición que vale la pena atender ahora, cuando el cuerpo responde más rápido.<br><br>El cuerpo habla en voz baja antes de hablar más fuerte. Leer esas señales a tiempo es lo que hace la diferencia.';}
+  else{pt.textContent='Qué significa y qué no significa este resultado';ptx.innerHTML='Tus sistemas muestran señales estables. Eso es bueno.<br><br>Pero la perimenopausia cambia con el tiempo. Mantener la base nutricional activa ahora es lo que protege cómo te vas a sentir en los próximos años.';}
+
+  document.getElementById('pb').style.width='100%';
+
+  // ── Cierre de venta dinámico según deseo, urgencia, inversión y señales ──
+  const ruta = crearRutaRecomendada(rojos, amarillos);
+  aplicarCierre(ruta);
+
+  // ── La ruta siempre lleva a una decisión pagada: Reto o Plan ──
+  const ctaPagada = document.getElementById('cta-pagada');
+  if (ctaPagada) ctaPagada.style.display = 'block';
+}
+
+// ── WEBHOOK N8N ──
+function enviarWebhook(payload) {
+  try {
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(()=>{});
+  } catch (e) {}
+}
+
+// ── LECTORES DE RESPUESTAS (texto legible que vio el usuario) ──
+function sevLabel(v){ return ['0 - Sin síntoma','1 - Leve','2 - Moderado','3 - Severo'][v] || '0 - Sin síntoma'; }
+function radioAns(name){
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? [ el.closest('.ro').textContent.trim() ] : [];
+}
+function selectAns(id){
+  const s = document.getElementById(id);
+  if (!s || !s.value) return [];
+  return [ s.selectedOptions[0].text.trim() ];
+}
+function checksAns(listId){
+  return [...document.querySelectorAll('#'+listId+' .ck-item.on')]
+    .map(e => e.querySelector('.ck-txt').textContent.trim());
+}
+function textAns(id){
+  const el = document.getElementById(id);
+  const v = el ? el.value.trim() : '';
+  return v ? [v] : [];
+}
+
+// ── CONSTRUYE responses (todas las preguntas, questionId secuencial 1..N) ──
+function construirResponses(){
+  const out = [];
+  let id = 0;
+  const add = (questionText, answers) => { out.push({ questionId: ++id, questionText, answers: answers || [] }); };
+
+  add('Marca lo que reconoces', checksAns('intro-list'));
+  add('¿En qué país resides actualmente?', selectAns('f-pais'));
+  add('¿Cuál es tu edad?', radioAns('edad'));
+  add('¿Cuál describe mejor tu situación actual?', radioAns('situacion'));
+  add('¿Cuál es el síntoma que más afecta tu calidad de vida hoy?', radioAns('sintoma1'));
+  add('¿Cuál es el segundo síntoma que más te gustaría resolver?', radioAns('sintoma2'));
+  add('¿Hace cuánto tiempo este problema afecta tu vida?', radioAns('tiempo_prob'));
+  add('Si este problema continúa igual durante otro año, ¿qué es lo que más te preocupa?', radioAns('costo_prob'));
+  add('¿Qué has intentado para sentirte mejor?', checksAns('intentos-list'));
+  add('Aproximadamente, ¿cuánto has gastado intentando resolver este problema?', radioAns('gasto'));
+  add('¿Qué fue lo que te hizo buscar ayuda justamente ahora?', radioAns('detonante'));
+  add('¿Cuál de estas frases se parece más a ti?', radioAns('marianismo'));
+  add('¿Qué es lo más difícil para ti en este momento?', radioAns('dificil'));
+  add('Si pudiera resolver ___ en los próximos 30 días, sentiría que voy por buen camino.', textAns('f-problema30'));
+  add('¿Cuánta agua tomas al día?', selectAns('f-agua'));
+  add('¿Cuántos cafés tomas al día?', selectAns('f-cafe'));
+  add('Horas de sueño promedio por noche', selectAns('f-sueno'));
+  add('Nivel de estrés diario (1 bajo — 5 muy alto)', selectAns('f-estres'));
+  add('¿Cómo está tu ciclo menstrual actualmente?', selectAns('f-ciclo'));
+  add('¿Cuántas veces vas al baño (evacuación) al día?', selectAns('f-bano'));
+  add('¿Cómo son tus evacuaciones habitualmente?', selectAns('f-evac'));
+  // Test de síntomas: 6 sistemas × 8 ítems (severidad 0-3)
+  SYS.forEach(s => { s.sx.forEach((sx, i) => add(sx, [ sevLabel(SC[s.key][i]) ])); });
+  add('¿Cuánto tiempo llevas sintiéndote así?', radioAns('tiempo'));
+  add('¿Qué has intentado antes para sentirte mejor?', radioAns('intentado'));
+  // Triaje de seguridad
+  add('¿Estás actualmente en tratamiento activo por cáncer?', radioAns('tcancer'));
+  add('¿Estás embarazada o en período de lactancia activa?', radioAns('tembarazo'));
+  add('¿Tienes insuficiencia renal diagnosticada?', radioAns('trenal'));
+  add('¿Estás tomando algún medicamento psiquiátrico actualmente?', radioAns('tpsiq'));
+  const psiqMed = textAns('f-psiq-med');
+  if (psiqMed.length) add('¿Cuál o cuáles? (nombre del medicamento)', psiqMed);
+  add('En las últimas 2 semanas, ¿has tenido pensamientos de no querer estar aquí o de hacerte daño?', radioAns('tcrisis'));
+  add('¿Tienes antecedentes familiares de cáncer hormonal (mama, ovario, útero)?', radioAns('tantfam'));
+  // Preguntas comerciales
+  add('¿Cuál de estas opciones te haría decir: "esto es exactamente lo que necesito ahora"?', radioAns('necesidad'));
+  add('¿Cómo prefieres aprender?', checksAns('formato-list'));
+  add('Si decidieras empezar por algo pequeño, ¿qué probarías primero?', radioAns('producto1'));
+  add('Si encontraras una solución que realmente se adapte a tu situación, ¿qué inversión mensual considerarías razonable?', radioAns('inversion_mensual2'));
+  // Contacto
+  add('Nombre', textAns('g-nombre'));
+  add('Correo electrónico', textAns('g-email'));
+  return out;
+}
+
+function togglePsiq() {
+  const val = document.querySelector('input[name="tpsiq"]:checked')?.value;
+  document.getElementById('psiq-detalle').style.display = val === 'si' ? 'block' : 'none';
+}
+
+buildSys();
+</script>
+</body>
+</html>

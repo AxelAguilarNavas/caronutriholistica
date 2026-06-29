@@ -1,0 +1,26 @@
+# ── Documentos internos / con secretos (NO subir a GitHub) ──
+ChatBot.json
+GUIA-CONEXION.md
+
+# ── Variables de entorno (secretos / config local) ──
+.env
+.env.*
+!.env.example
+
+# ── Config generada en runtime (se inyecta por entorno) ──
+config.js
+
+# ── Node ──
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ── Herramientas locales / editor ──
+.claude/
+.vscode/
+.idea/
+
+# ── Sistema operativo ──
+.DS_Store
+Thumbs.db
+*.log
