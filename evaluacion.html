@@ -1155,12 +1155,21 @@ function valGate() {
   const niveles = contarNiveles(nb);
   crearRutaRecomendada(niveles.rojos, niveles.amarillos);
   // ── Guardar TODAS las respuestas en el webhook de n8n ──
+  const _rutaLink = D.ruta_recomendada === 'plan_300' ? LINK_PLAN_300 : LINK_RETO_21;
+  const _rutaNombre = D.ruta_recomendada === 'plan_300' ? 'Vuelve a Sentirte Tú 40+' : 'Reto 21 Días Juntas';
+  const _rutaPrecio = D.ruta_recomendada === 'plan_300' ? '$300 USD' : '$27 USD';
   enviarWebhook({
-    quizId:         '1',
-    userId:         D.userId         || '',
-    sourcePlatform: D.sourcePlatform || '',
-    channel:        D.channel        || 'whatsapp',
-    responses:      construirResponses()
+    quizId:           '1',
+    userId:           D.userId         || '',
+    sourcePlatform:   D.sourcePlatform || '',
+    channel:          D.channel        || 'whatsapp',
+    rutaRecomendada:  D.ruta_recomendada || 'reto_21',
+    productoNombre:   _rutaNombre,
+    precio:           _rutaPrecio,
+    urlPago:          _rutaLink,
+    leadScore:        D.lead_score     || 0,
+    cierreMotivo:     D.cierre_motivo  || '',
+    responses:        construirResponses()
   });
   document.querySelectorAll('.step').forEach(s => s.classList.remove('on'));
   document.getElementById('loading').classList.add('on');
