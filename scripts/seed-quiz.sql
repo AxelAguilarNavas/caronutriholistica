@@ -450,9 +450,9 @@ WHERE survey_id = 1 AND question_order = 75;
 
 -- Q76: CONDICIONAL — solo aparece si Q75 = 'Sí'
 INSERT INTO questions (survey_id, section_id, question_order, question_text, question_type,
-                       is_conditional, conditional_on, conditional_value)
+                       is_required, is_conditional, conditional_on, conditional_value)
 SELECT 1, 16, 76, '¿Cuál o cuáles? (nombre del medicamento)', 'text',
-       true, id, 'Sí'
+       false, true, id, 'Sí'
 FROM questions WHERE survey_id = 1 AND question_order = 75;
 -- Sin opciones (texto libre)
 

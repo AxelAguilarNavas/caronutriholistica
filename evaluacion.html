@@ -614,7 +614,7 @@ body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--c);min-heigh
   <button class="btn-bk" onclick="go(21)">← Atrás</button>
   <div class="stit" style="font-size:17px;line-height:1.4">¿Cuál de estas opciones te haría decir: "esto es exactamente lo que necesito ahora"?</div>
   <div class="ro-g" style="margin-top:18px">
-    <label class="ro"><input type="radio" name="necesidad" value="entender_cuerpo"> Entender qué le pasa a mi cuerpo y por dónde empezar.</label>
+    <label class="ro"><input type="radio" name="necesidad" value="entender_cuerpo"> Entender qué le pasa a mi cuerpo y por dónde empezar</label>
     <label class="ro"><input type="radio" name="necesidad" value="dormir_energia"> Dormir mejor y despertar con más energía.</label>
     <label class="ro"><input type="radio" name="necesidad" value="desinflamar"> Desinflamar mi barriga y sentirme más liviana.</label>
     <label class="ro"><input type="radio" name="necesidad" value="calmar_ansiedad"> Calmar la ansiedad, las palpitaciones y la irritabilidad.</label>
@@ -798,8 +798,8 @@ const SYS = [
   {step:18,key:'tiroides',label:'Sistema 4 de 6',tit:'Tiroides y metabolismo',
    sub:'Marca la intensidad de cada señal en los últimos 30 días.',
    sx:['Fatiga profunda aunque haya dormido','Caída de cabello más de lo normal',
-       'Frío en manos y pies con frecuencia','Niebla mental o dificultad para concentrarme',
-       'Olvidos frecuentes o memoria que falla',
+       'Frío en manos y pies con frecuencia','Niebla mental o dificultad para concentrarme (tiroides)',
+       'Olvidos frecuentes o memoria que falla (tiroides)',
        'El médico me dijo que estaba bien pero no me siento bien',
        'El peso no baja aunque me cuide y haga ejercicio','Me levanto lenta y gano energía en la tarde'],
    factor:2,
@@ -1546,8 +1546,7 @@ function construirResponses(){
   add('¿Estás embarazada o en período de lactancia activa?', radioAns('tembarazo'));
   add('¿Tienes insuficiencia renal diagnosticada?', radioAns('trenal'));
   add('¿Estás tomando algún medicamento psiquiátrico actualmente?', radioAns('tpsiq'));
-  const psiqMed = textAns('f-psiq-med');
-  if (psiqMed.length) add('¿Cuál o cuáles? (nombre del medicamento)', psiqMed);
+  add('¿Cuál o cuáles? (nombre del medicamento)', textAns('f-psiq-med'));
   add('En las últimas 2 semanas, ¿has tenido pensamientos de no querer estar aquí o de hacerte daño?', radioAns('tcrisis'));
   add('¿Tienes antecedentes familiares de cáncer hormonal (mama, ovario, útero)?', radioAns('tantfam'));
   // Preguntas comerciales
