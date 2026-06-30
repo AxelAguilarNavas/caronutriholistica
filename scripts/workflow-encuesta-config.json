@@ -1,0 +1,89 @@
+{
+  "name": "Encuesta: Obtener configuración",
+  "nodes": [
+
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "encuesta-config",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "11111111-1111-1111-1111-111111111111",
+      "name": "Webhook: Obtener encuesta",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "encuesta-config"
+    },
+
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  s.id            AS survey_id,\n  s.name          AS survey_name,\n  q.id            AS question_id,\n  q.question_order,\n  q.question_text,\n  q.question_type,\n  q.is_required,\n  qo.id           AS option_id,\n  qo.option_order,\n  qo.option_text\nFROM surveys s\nJOIN questions q ON q.survey_id = s.id\nLEFT JOIN question_options qo ON qo.question_id = q.id\nWHERE s.id = $1\nORDER BY q.question_order, qo.option_order",
+        "additionalFields": {
+          "queryParams": "={{ [parseInt($json.query?.surveyId) || 1] }}"
+        }
+      },
+      "id": "22222222-2222-2222-2222-222222222222",
+      "name": "Postgres: Obtener configuración",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [480, 300],
+      "credentials": {
+        "postgres": { "id": "PG_CREDENTIAL_ID", "name": "PostgreSQL Dedicado" }
+      }
+    },
+
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all().map(item => item.json);\n\nif (rows.length === 0) {\n  return [{ json: { ok: false, error: 'Encuesta no encontrada', surveyId: null } }];\n}\n\nconst survey = {\n  Encuestaid:    String(rows[0].survey_id),\n  NombreEncuesta: rows[0].survey_name,\n  Preguntas:     [],\n};\n\nconst questionsMap = new Map();\n\nfor (const row of rows) {\n  if (!questionsMap.has(row.question_id)) {\n    questionsMap.set(row.question_id, {\n      Preguntaid:    String(row.question_id),\n      PreguntaTexto: row.question_text,\n      PreguntaTipo:  row.question_type,\n      obligatorio:   row.is_required,\n      opciones:      [],\n    });\n  }\n\n  if (row.option_id !== null && row.option_id !== undefined) {\n    questionsMap.get(row.question_id).opciones.push({\n      opcionid:    String(row.option_id),\n      opciontexto: row.option_text,\n    });\n  }\n}\n\nsurvey.Preguntas = Array.from(questionsMap.values());\n\nreturn [{ json: survey }];"
+      },
+      "id": "33333333-3333-3333-3333-333333333333",
+      "name": "Code: Formatear estructura",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 300]
+    },
+
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "44444444-4444-4444-4444-444444444444",
+      "name": "Respond: Configuración",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [960, 300]
+    }
+
+  ],
+
+  "connections": {
+    "Webhook: Obtener encuesta": {
+      "main": [
+        [{ "node": "Postgres: Obtener configuración", "type": "main", "index": 0 }]
+      ]
+    },
+    "Postgres: Obtener configuración": {
+      "main": [
+        [{ "node": "Code: Formatear estructura", "type": "main", "index": 0 }]
+      ]
+    },
+    "Code: Formatear estructura": {
+      "main": [
+        [{ "node": "Respond: Configuración", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+
+  "pinData": {},
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "v1",
+  "meta": { "templateCredsSetupCompleted": false, "instanceId": "" },
+  "id": "encuesta-config",
+  "tags": []
+}

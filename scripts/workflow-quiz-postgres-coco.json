@@ -1,0 +1,478 @@
+{
+  "name": "Save Responses",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fcfad32f-13a7-4148-b2db-e9af457ba77d",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://www.caronutriholistica.tech/"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [-160, 576],
+      "id": "abbe75dc-afe6-47a0-a0f3-766f37d2bc56",
+      "name": "Webhook",
+      "webhookId": "fcfad32f-13a7-4148-b2db-e9af457ba77d"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d912329b-6525-410a-b181-b6cf805fcb84",
+              "name": "quizId",
+              "value": "={{ $json.body.quizId }}",
+              "type": "string"
+            },
+            {
+              "id": "29ca235a-646b-4990-b56b-eb299bc8cae1",
+              "name": "userId",
+              "value": "={{ $json.body.userId }}",
+              "type": "string"
+            },
+            {
+              "id": "cbc3f456-a3c2-442a-8254-65ed248f5558",
+              "name": "sourcePlatform",
+              "value": "={{ $json.body.sourcePlatform }}",
+              "type": "string"
+            },
+            {
+              "id": "e0cc02a9-f27d-4cf4-bd03-3142f0711937",
+              "name": "channel",
+              "value": "={{ $json.body.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "0bd396ef-b03c-4a92-99d9-78441fbb71cc",
+              "name": "responses",
+              "value": "={{ $json.body.responses }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [64, 576],
+      "id": "d8765179-1d4a-4e5d-8d13-a4866bac288a",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-userId",
+              "leftValue": "={{ $json.userId }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "rightValue": ""
+            },
+            {
+              "id": "cond-sourcePlatform",
+              "leftValue": "={{ $json.sourcePlatform }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "rightValue": ""
+            },
+            {
+              "id": "cond-channel",
+              "leftValue": "={{ $json.channel }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4a246fa3-8d96-4dfe-9041-c82cc0746ca5",
+      "name": "IF: Campos requeridos",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [288, 576]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: false, error: 'Campos requeridos faltantes', detail: 'userId, sourcePlatform y channel son obligatorios' }) }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "5d7423c1-7de8-48bd-ac46-f7f6697851e6",
+      "name": "Respond 400: Campos requeridos",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [512, 704]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://n8n.caronutriholistica.tech/webhook/encuesta-config?surveyId=' + $json.quizId }}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "id": "http-config-001",
+      "name": "HTTP: Obtener config encuesta",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [512, 448]
+    },
+    {
+      "parameters": {
+        "jsCode": "const editFields   = $('Edit Fields').first().json;\nconst surveyConfig = $input.first().json;\nconst responses    = editFields.responses || [];\nconst preguntas    = surveyConfig.Preguntas || [];\n\n// Verificar que la encuesta existe\nif (!surveyConfig.Encuestaid) {\n  return [{ json: {\n    isValid:  false,\n    httpCode: 404,\n    error:    'Encuesta no encontrada',\n    detail:   'No existe una encuesta activa con id ' + editFields.quizId\n  }}];\n}\n\nconst errors = [];\n\n// Mapa de respuestas por texto de pregunta\nconst responseMap = new Map();\nfor (const r of responses) {\n  responseMap.set(r.questionText, r.answers || []);\n}\n\n// Validar cada pregunta de la configuración\nfor (const pregunta of preguntas) {\n  const { PreguntaTexto, PreguntaTipo, obligatorio, opciones } = pregunta;\n  const answers = responseMap.get(PreguntaTexto) || [];\n\n  // Obligatoria sin respuesta\n  if (obligatorio && answers.length === 0) {\n    errors.push('Pregunta obligatoria sin respuesta: \"' + PreguntaTexto + '\"');\n    continue;\n  }\n\n  // Opción inválida en preguntas de selección\n  if (answers.length > 0 && PreguntaTipo !== 'text' && opciones && opciones.length > 0) {\n    const validas = new Set(opciones.map(o => o.opciontexto));\n    for (const ans of answers) {\n      if (!validas.has(ans)) {\n        errors.push('Opción inválida \"' + ans + '\" en pregunta: \"' + PreguntaTexto + '\"');\n      }\n    }\n  }\n}\n\nif (errors.length > 0) {\n  return [{ json: {\n    isValid:  false,\n    httpCode: 422,\n    error:    'Error de validación',\n    errors\n  }}];\n}\n\n// Retorna N items — uno por respuesta (ForEach implícito en n8n)\nreturn responses.map(r => ({\n  json: {\n    isValid:      true,\n    surveyId:     parseInt(surveyConfig.Encuestaid),\n    questionId:   r.questionId,\n    questionText: r.questionText,\n    answers:      r.answers || []\n  }\n}));"
+      },
+      "id": "code-validar-001",
+      "name": "Code: Validar respuestas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [736, 448]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-isValid",
+              "leftValue": "={{ $json.isValid }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-validacion-001",
+      "name": "IF: ¿Validación OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [960, 448]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: false, error: $json.error, detail: $json.detail || undefined, errors: $json.errors || undefined }) }}",
+        "options": {
+          "responseCode": "={{ $json.httpCode || 422 }}"
+        }
+      },
+      "id": "respond-4xx-001",
+      "name": "Respond 4xx: Error de validación",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1184, 576]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "validatedResponses",
+        "options": {}
+      },
+      "id": "d214aaf4-1038-4371-b928-9b8d10d1e80a",
+      "name": "Aggregate",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [1184, 336]
+    },
+    {
+      "parameters": {
+        "jsCode": "const editFields = $('Edit Fields').first().json;\nconst agg        = $input.first().json;\nconst surveyId   = agg.validatedResponses?.[0]?.surveyId || 1;\n\nconst getAnswer = (text) => {\n  const q = (editFields.responses || []).find(r => r.questionText === text);\n  return q?.answers?.[0] ?? null;\n};\nconst getAnswers = (text) => {\n  const q = (editFields.responses || []).find(r => r.questionText === text);\n  return q?.answers ?? [];\n};\n\nconst name           = getAnswer('Nombre');\nconst email          = getAnswer('Correo electrónico');\nconst topSymptom     = getAnswer('¿Cuál es el síntoma que más afecta tu calidad de vida hoy?');\nconst secondSymptom  = getAnswer('¿Cuál es el segundo síntoma que más te gustaría resolver?');\nconst timeProblem    = getAnswer('¿Hace cuánto tiempo este problema afecta tu vida?');\nconst previousHelp   = getAnswers('¿Qué has intentado para sentirte mejor?');\nconst intent         = getAnswer('Si pudiera resolver ___ en los próximos 30 días, sentiría que voy por buen camino.');\nconst budget         = getAnswer('Si encontraras una solución que realmente se adapte a tu situación, ¿qué inversión mensual considerarías razonable?');\nconst firstStep      = getAnswer('Si decidieras empezar por algo pequeño, ¿qué probarías primero?');\nconst learnStyle     = getAnswers('¿Cómo prefieres aprender?');\n\nconst structuredData = {\n  userId:              editFields.userId,\n  nombre:              name,\n  email:               email,\n  paisResidencia:      getAnswer('¿En qué país resides actualmente?'),\n  edad:                getAnswer('¿Cuál es tu edad?'),\n  situacionActual:     getAnswer('¿Cuál describe mejor tu situación actual?'),\n  sintomaPrincipal:    topSymptom,\n  segundoSintoma:      secondSymptom,\n  tiempoConElProblema: timeProblem,\n  preocupacionFutura:  getAnswer('Si este problema continúa igual durante otro año, ¿qué es lo que más te preocupa?'),\n  intentosAnteriores:  previousHelp,\n  inversionAnterior:   getAnswer('Aproximadamente, ¿cuánto has gastado intentando resolver este problema?'),\n  motivoAhora:         getAnswer('¿Qué fue lo que te hizo buscar ayuda justamente ahora?'),\n  intencion:           intent,\n  presupuestoMensual:  budget,\n  prefieriaEmpezarCon: firstStep,\n  formaDeAprender:     learnStyle\n};\n\nconst sistemaMessage =\n  '[SISTEMA] El usuario ha completado la Evaluación NutriBalance.\\n\\n' +\n  JSON.stringify(structuredData, null, 2);\n\nreturn [{\n  json: {\n    userId:         editFields.userId,\n    sourcePlatform: editFields.sourcePlatform,\n    channel:        editFields.channel,\n    surveyId,\n    extractedName:  name,\n    extractedEmail: email,\n    sistemaMessage,\n    rawPayload: {\n      userId:         editFields.userId,\n      sourcePlatform: editFields.sourcePlatform,\n      channel:        editFields.channel,\n      responses:      editFields.responses || []\n    }\n  }\n}];"
+      },
+      "id": "b91b3812-bedf-4edf-ab2b-0d43a4efc2d4",
+      "name": "Code: Preparar payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1408, 336]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO clients (user_id, name, email, source_platform, channel, updated_at)\nVALUES (NULLIF($1, ''), $2, $3, $4, $5, NOW())\nON CONFLICT (user_id) DO UPDATE SET\n  name            = COALESCE(EXCLUDED.name, clients.name),\n  email           = COALESCE(EXCLUDED.email, clients.email),\n  source_platform = EXCLUDED.source_platform,\n  channel         = EXCLUDED.channel,\n  updated_at      = NOW()\nRETURNING id",
+        "options": {}
+      },
+      "id": "fe7d27e5-a341-4f2f-a846-2f7bfb29ae24",
+      "name": "Postgres: UPSERT clients",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1632, 336],
+      "credentials": {
+        "postgres": {
+          "id": "VpCpaookAdNtlzxd",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO quiz_submissions (client_id, survey_id, user_id, source_platform, channel, raw_payload)\nVALUES ($1, $2, $3, $4, $5, $6::jsonb)\nRETURNING id",
+        "options": {}
+      },
+      "id": "664eb7d5-4367-4976-962b-636a427ed457",
+      "name": "Postgres: INSERT submission",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1856, 336],
+      "credentials": {
+        "postgres": {
+          "id": "VpCpaookAdNtlzxd",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openclaw.caronutriholistica.tech/webhooks/n8n/coco",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer b71d2ad43693f980fd9b6a8c93547a6aa139c6afb94eab48"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ userId: $('Code: Preparar payload').first().json.userId, message: $('Code: Preparar payload').first().json.sistemaMessage, sourcePlatform: $('Code: Preparar payload').first().json.sourcePlatform, channel: $('Code: Preparar payload').first().json.channel }) }}",
+        "options": {}
+      },
+      "id": "9f14c180-3d8a-4f03-8c96-aa0400d09640",
+      "name": "HTTP: Llamar Coco",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2080, 336]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: true, submissionId: $('Postgres: INSERT submission').first().json.id }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "11556922-673c-4c87-974f-c30d34f07320",
+      "name": "Respond 200: OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [2304, 336]
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.caronutriholistica.tech",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
+            "content-length": "9378",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "es-US,es;q=0.9",
+            "content-type": "application/json",
+            "dnt": "1",
+            "origin": "https://caronutriholistica.tech",
+            "priority": "u=1, i",
+            "referer": "https://caronutriholistica.tech/",
+            "sec-ch-ua": "\"Google Chrome\";v=\"149\", \"Chromium\";v=\"149\", \"Not)A;Brand\";v=\"24\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "same-site",
+            "x-forwarded-for": "181.115.59.117",
+            "x-forwarded-host": "n8n.caronutriholistica.tech",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "8b6da53c8229",
+            "x-real-ip": "181.115.59.117"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "quizId": "1",
+            "userId": "50441918540",
+            "sourcePlatform": "Manychat",
+            "channel": "whatsapp",
+            "responses": [
+              { "questionId": 1,  "questionText": "Marca lo que reconoces",                                                                                                         "answers": ["Me dijeron que mis análisis están bien pero yo sigo sintiéndome mal"] },
+              { "questionId": 2,  "questionText": "¿En qué país resides actualmente?",                                                                                             "answers": ["Estados Unidos"] },
+              { "questionId": 3,  "questionText": "¿Cuál es tu edad?",                                                                                                             "answers": ["Menos de 35"] },
+              { "questionId": 4,  "questionText": "¿Cuál describe mejor tu situación actual?",                                                                                     "answers": ["Trabajo tiempo completo"] },
+              { "questionId": 5,  "questionText": "¿Cuál es el síntoma que más afecta tu calidad de vida hoy?",                                                                    "answers": ["No duermo bien"] },
+              { "questionId": 6,  "questionText": "¿Cuál es el segundo síntoma que más te gustaría resolver?",                                                                     "answers": ["No duermo bien"] },
+              { "questionId": 7,  "questionText": "¿Hace cuánto tiempo este problema afecta tu vida?",                                                                             "answers": ["Menos de 3 meses"] },
+              { "questionId": 8,  "questionText": "Si este problema continúa igual durante otro año, ¿qué es lo que más te preocupa?",                                             "answers": ["Dormir peor"] },
+              { "questionId": 9,  "questionText": "¿Qué has intentado para sentirte mejor?",                                                                                       "answers": ["Suplementos"] },
+              { "questionId": 10, "questionText": "Aproximadamente, ¿cuánto has gastado intentando resolver este problema?",                                                        "answers": ["Nada"] },
+              { "questionId": 11, "questionText": "¿Qué fue lo que te hizo buscar ayuda justamente ahora?",                                                                        "answers": ["Los síntomas empeoraron"] },
+              { "questionId": 12, "questionText": "¿Cuál de estas frases se parece más a ti?",                                                                                     "answers": ["Me cuesta priorizarme cuando otros me necesitan"] },
+              { "questionId": 13, "questionText": "¿Qué es lo más difícil para ti en este momento?",                                                                               "answers": ["Encontrar tiempo para mí"] },
+              { "questionId": 14, "questionText": "Si pudiera resolver ___ en los próximos 30 días, sentiría que voy por buen camino.",                                            "answers": ["adsfasdf"] },
+              { "questionId": 15, "questionText": "¿Cuánta agua tomas al día?",                                                                                                    "answers": ["Menos de 1 litro"] },
+              { "questionId": 16, "questionText": "¿Cuántos cafés tomas al día?",                                                                                                  "answers": ["Ninguno"] },
+              { "questionId": 17, "questionText": "Horas de sueño promedio por noche",                                                                                             "answers": ["Menos de 5 horas"] },
+              { "questionId": 18, "questionText": "Nivel de estrés diario (1 bajo — 5 muy alto)",                                                                                  "answers": ["1 — Bajo"] },
+              { "questionId": 19, "questionText": "¿Cómo está tu ciclo menstrual actualmente?",                                                                                    "answers": ["Regular (cada 28-32 días)"] },
+              { "questionId": 20, "questionText": "¿Cuántas veces vas al baño (evacuación) al día?",                                                                               "answers": ["Menos de 1 vez"] },
+              { "questionId": 21, "questionText": "¿Cómo son tus evacuaciones habitualmente?",                                                                                     "answers": ["Normales / formadas"] },
+              { "questionId": 22, "questionText": "Sofocos o calores repentinos de día",                                                                                           "answers": ["0 - Sin síntoma"] },
+              { "questionId": 23, "questionText": "Sudores nocturnos que me despiertan",                                                                                           "answers": ["0 - Sin síntoma"] },
+              { "questionId": 24, "questionText": "Palpitaciones sin causa cardíaca confirmada",                                                                                   "answers": ["0 - Sin síntoma"] },
+              { "questionId": 25, "questionText": "Ciclo irregular o muy diferente a antes",                                                                                       "answers": ["0 - Sin síntoma"] },
+              { "questionId": 26, "questionText": "Pérdida de libido o sequedad vaginal",                                                                                          "answers": ["0 - Sin síntoma"] },
+              { "questionId": 27, "questionText": "Senos sensibles o hinchados sin razón",                                                                                         "answers": ["0 - Sin síntoma"] },
+              { "questionId": 28, "questionText": "Irritabilidad nueva que no reconozco en mí",                                                                                    "answers": ["0 - Sin síntoma"] },
+              { "questionId": 29, "questionText": "Nerviosismo antes del período o sin razón",                                                                                     "answers": ["0 - Sin síntoma"] },
+              { "questionId": 30, "questionText": "Me despierto entre las 2 y 4am sin poder volver a dormir",                                                                      "answers": ["0 - Sin síntoma"] },
+              { "questionId": 31, "questionText": "Me levanto cansada aunque dormí suficientes horas",                                                                             "answers": ["0 - Sin síntoma"] },
+              { "questionId": 32, "questionText": "Dificultad para quedarme dormida",                                                                                              "answers": ["0 - Sin síntoma"] },
+              { "questionId": 33, "questionText": "Ansiedad sin razón clara",                                                                                                      "answers": ["0 - Sin síntoma"] },
+              { "questionId": 34, "questionText": "Energía alta en la noche, baja en la mañana",                                                                                   "answers": ["0 - Sin síntoma"] },
+              { "questionId": 35, "questionText": "Fatiga que no mejora aunque duerma",                                                                                            "answers": ["0 - Sin síntoma"] },
+              { "questionId": 36, "questionText": "Dificultad para relajarme o desconectarme",                                                                                     "answers": ["0 - Sin síntoma"] },
+              { "questionId": 37, "questionText": "Sensación de alerta sin peligro real",                                                                                          "answers": ["0 - Sin síntoma"] },
+              { "questionId": 38, "questionText": "Tristeza o ganas de llorar sin razón clara",                                                                                    "answers": ["0 - Sin síntoma"] },
+              { "questionId": 39, "questionText": "Cambios de humor que me sorprenden a mí misma",                                                                                 "answers": ["0 - Sin síntoma"] },
+              { "questionId": 40, "questionText": "Más deprimida que de costumbre",                                                                                                "answers": ["0 - Sin síntoma"] },
+              { "questionId": 41, "questionText": "Niebla mental o dificultad para concentrarme",                                                                                  "answers": ["0 - Sin síntoma"] },
+              { "questionId": 42, "questionText": "Olvidos frecuentes o memoria que falla",                                                                                        "answers": ["0 - Sin síntoma"] },
+              { "questionId": 43, "questionText": "Dificultad para encontrar palabras al hablar",                                                                                  "answers": ["0 - Sin síntoma"] },
+              { "questionId": 44, "questionText": "El estrés me afecta mucho más que antes",                                                                                       "answers": ["0 - Sin síntoma"] },
+              { "questionId": 45, "questionText": "Llanto fácil o reacciones emocionales fuertes",                                                                                 "answers": ["0 - Sin síntoma"] },
+              { "questionId": 46, "questionText": "Fatiga profunda aunque haya dormido",                                                                                           "answers": ["0 - Sin síntoma"] },
+              { "questionId": 47, "questionText": "Caída de cabello más de lo normal",                                                                                             "answers": ["0 - Sin síntoma"] },
+              { "questionId": 48, "questionText": "Frío en manos y pies con frecuencia",                                                                                           "answers": ["0 - Sin síntoma"] },
+              { "questionId": 49, "questionText": "Niebla mental o dificultad para concentrarme",                                                                                  "answers": ["0 - Sin síntoma"] },
+              { "questionId": 50, "questionText": "Olvidos frecuentes o memoria que falla",                                                                                        "answers": ["0 - Sin síntoma"] },
+              { "questionId": 51, "questionText": "El médico me dijo que estaba bien pero no me siento bien",                                                                      "answers": ["0 - Sin síntoma"] },
+              { "questionId": 52, "questionText": "El peso no baja aunque me cuide y haga ejercicio",                                                                              "answers": ["0 - Sin síntoma"] },
+              { "questionId": 53, "questionText": "Me levanto lenta y gano energía en la tarde",                                                                                   "answers": ["0 - Sin síntoma"] },
+              { "questionId": 54, "questionText": "Calambres en piernas o pies, especialmente de noche",                                                                           "answers": ["0 - Sin síntoma"] },
+              { "questionId": 55, "questionText": "Dolor en articulaciones al despertar",                                                                                          "answers": ["0 - Sin síntoma"] },
+              { "questionId": 56, "questionText": "Uñas quebradizas o que crecen lento",                                                                                          "answers": ["0 - Sin síntoma"] },
+              { "questionId": 57, "questionText": "Cabello seco o con caída excesiva",                                                                                             "answers": ["0 - Sin síntoma"] },
+              { "questionId": 58, "questionText": "Dolor de cabeza nuevo o más frecuente",                                                                                         "answers": ["0 - Sin síntoma"] },
+              { "questionId": 59, "questionText": "Pérdida de masa muscular aunque haga ejercicio",                                                                                "answers": ["0 - Sin síntoma"] },
+              { "questionId": 60, "questionText": "Manchas blancas en las uñas",                                                                                                   "answers": ["0 - Sin síntoma"] },
+              { "questionId": 61, "questionText": "Heridas que tardan en sanar",                                                                                                   "answers": ["0 - Sin síntoma"] },
+              { "questionId": 62, "questionText": "Me hincho durante el día aunque coma poco",                                                                                     "answers": ["0 - Sin síntoma"] },
+              { "questionId": 63, "questionText": "Gases o eructos frecuentes después de comer",                                                                                   "answers": ["0 - Sin síntoma"] },
+              { "questionId": 64, "questionText": "Bajón de energía a las 3pm",                                                                                                    "answers": ["0 - Sin síntoma"] },
+              { "questionId": 65, "questionText": "Antojos de dulce o pan después de comer",                                                                                       "answers": ["0 - Sin síntoma"] },
+              { "questionId": 66, "questionText": "Grasa abdominal que no baja aunque me cuide",                                                                                   "answers": ["0 - Sin síntoma"] },
+              { "questionId": 67, "questionText": "Tomo suplementos pero no noto diferencia real",                                                                                 "answers": ["0 - Sin síntoma"] },
+              { "questionId": 68, "questionText": "Infecciones urinarias o vaginales frecuentes",                                                                                  "answers": ["0 - Sin síntoma"] },
+              { "questionId": 69, "questionText": "Cansancio después de comer",                                                                                                    "answers": ["0 - Sin síntoma"] },
+              { "questionId": 70, "questionText": "¿Cuánto tiempo llevas sintiéndote así?",                                                                                        "answers": ["Menos de 6 meses"] },
+              { "questionId": 71, "questionText": "¿Qué has intentado antes para sentirte mejor?",                                                                                 "answers": ["No he intentado nada todavía"] },
+              { "questionId": 72, "questionText": "¿Estás actualmente en tratamiento activo por cáncer?",                                                                          "answers": ["No"] },
+              { "questionId": 73, "questionText": "¿Estás embarazada o en período de lactancia activa?",                                                                           "answers": ["No"] },
+              { "questionId": 74, "questionText": "¿Tienes insuficiencia renal diagnosticada?",                                                                                    "answers": ["No"] },
+              { "questionId": 75, "questionText": "¿Estás tomando algún medicamento psiquiátrico actualmente?",                                                                    "answers": ["No"] },
+              { "questionId": 76, "questionText": "En las últimas 2 semanas, ¿has tenido pensamientos de no querer estar aquí o de hacerte daño?",                                 "answers": ["No"] },
+              { "questionId": 77, "questionText": "¿Tienes antecedentes familiares de cáncer hormonal (mama, ovario, útero)?",                                                     "answers": ["No"] },
+              { "questionId": 78, "questionText": "¿Cuál de estas opciones te haría decir: \"esto es exactamente lo que necesito ahora\"?",                                        "answers": ["Entender qué le pasa a mi cuerpo y por dónde empezar."] },
+              { "questionId": 79, "questionText": "¿Cómo prefieres aprender?",                                                                                                     "answers": ["Guías PDF"] },
+              { "questionId": 80, "questionText": "Si decidieras empezar por algo pequeño, ¿qué probarías primero?",                                                               "answers": ["Reto 21 días acompañado"] },
+              { "questionId": 81, "questionText": "Si encontraras una solución que realmente se adapte a tu situación, ¿qué inversión mensual considerarías razonable?",           "answers": ["Menos de $20 USD"] },
+              { "questionId": 82, "questionText": "Nombre",                                                                                                                         "answers": ["prueba"] },
+              { "questionId": 83, "questionText": "Correo electrónico",                                                                                                             "answers": ["prueba@test.com"] }
+            ]
+          },
+          "webhookUrl": "https://carolina-marino-n8nwithpostgres-150fd9-2-25-66-208.sslip.io/webhook/fcfad32f-13a7-4148-b2db-e9af457ba77d",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Edit Fields", "type": "main", "index": 0 }]]
+    },
+    "Edit Fields": {
+      "main": [[{ "node": "IF: Campos requeridos", "type": "main", "index": 0 }]]
+    },
+    "IF: Campos requeridos": {
+      "main": [
+        [{ "node": "HTTP: Obtener config encuesta", "type": "main", "index": 0 }],
+        [{ "node": "Respond 400: Campos requeridos", "type": "main", "index": 0 }]
+      ]
+    },
+    "HTTP: Obtener config encuesta": {
+      "main": [[{ "node": "Code: Validar respuestas", "type": "main", "index": 0 }]]
+    },
+    "Code: Validar respuestas": {
+      "main": [[{ "node": "IF: ¿Validación OK?", "type": "main", "index": 0 }]]
+    },
+    "IF: ¿Validación OK?": {
+      "main": [
+        [{ "node": "Aggregate", "type": "main", "index": 0 }],
+        [{ "node": "Respond 4xx: Error de validación", "type": "main", "index": 0 }]
+      ]
+    },
+    "Aggregate": {
+      "main": [[{ "node": "Code: Preparar payload", "type": "main", "index": 0 }]]
+    },
+    "Code: Preparar payload": {
+      "main": [[{ "node": "Postgres: UPSERT clients", "type": "main", "index": 0 }]]
+    },
+    "Postgres: UPSERT clients": {
+      "main": [[{ "node": "Postgres: INSERT submission", "type": "main", "index": 0 }]]
+    },
+    "Postgres: INSERT submission": {
+      "main": [[{ "node": "HTTP: Llamar Coco", "type": "main", "index": 0 }]]
+    },
+    "HTTP: Llamar Coco": {
+      "main": [[{ "node": "Respond 200: OK", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "6c4736e2-6f2e-431b-90e2-1d4826d3a46a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0c5c78604cc0e10ff5bad34dae7f31030a1a0d0d0c39e69994679d68b75bc2ef"
+  },
+  "nodeGroups": [],
+  "id": "a4KwRr73CWcbpL3i",
+  "tags": []
+}

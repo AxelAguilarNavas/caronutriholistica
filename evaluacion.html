@@ -929,6 +929,7 @@ function toggleOtra(name, boxId, txtId) {
 
 function salir(motivo) {
   enviarWebhook({
+    quizId:         '1',
     userId:         D.userId         || '',
     sourcePlatform: D.sourcePlatform || '',
     channel:        D.channel        || 'whatsapp',
@@ -1155,6 +1156,7 @@ function valGate() {
   crearRutaRecomendada(niveles.rojos, niveles.amarillos);
   // ── Guardar TODAS las respuestas en el webhook de n8n ──
   enviarWebhook({
+    quizId:         '1',
     userId:         D.userId         || '',
     sourcePlatform: D.sourcePlatform || '',
     channel:        D.channel        || 'whatsapp',
