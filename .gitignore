@@ -1,7 +1,6 @@
 # ── Documentos internos / con secretos (NO subir a GitHub) ──
 ChatBot.json
-GUIA-CONEXION.md
-PROYECTO.md
+context-test-docs/
 
 # ── Variables de entorno (secretos / config local) ──
 .env

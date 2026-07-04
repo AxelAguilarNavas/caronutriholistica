@@ -1,0 +1,303 @@
+{
+  "name": "ManyChat - Toggle BotStatus",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "manychat-bot-toggle",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "0b104b79-4f07-4d7f-9d49-1a0fdd0349c8",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1104,
+        864
+      ],
+      "webhookId": "1860e618-0e8a-4193-a19a-b44e897ccb77"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-subscriber_id",
+              "leftValue": "={{ $json.subscriber_id }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "rightValue": ""
+            },
+            {
+              "id": "cond-bot_status",
+              "leftValue": "={{ $json.bot_status }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f0a5d2d2-3ccb-45ba-b777-635ff1a72058",
+      "name": "IF: Campos requeridos",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        864
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: false, error: 'Campos requeridos faltantes', detail: 'subscriber_id (string) y bot_status (booleano true/false) son obligatorios' }) }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "3c66efc8-b61e-48f5-90d4-407cc4549abe",
+      "name": "Respond 400: Campos requeridos",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        -656,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ \"https://api.manychat.com/fb/subscriber/getInfo?subscriber_id=\" + $json.subscriber_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "52cf94d8-f3a4-41b1-9003-1d1bce9ecf89",
+      "name": "Get Subscriber Info",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -656,
+        768
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fMntGTvhDGuMASNq",
+          "name": "Manychat API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-has-error",
+              "leftValue": "={{ $json.error }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "rightValue": ""
+            },
+            {
+              "id": "cond-status-error",
+              "leftValue": "={{ $json.status }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "rightValue": "error"
+            },
+            {
+              "id": "cond-no-data",
+              "leftValue": "={{ $json.data }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "notExists",
+                "singleValue": true
+              },
+              "rightValue": ""
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {
+          "looseTypeValidation": true
+        }
+      },
+      "id": "17553858-213b-4a56-a2a3-710aaa595c08",
+      "name": "IF: Usuario no existe",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -432,
+        768
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: false, error: 'Usuario no encontrado en ManyChat', subscriber_id: $('Webhook').item.json.subscriber_id }) }}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "id": "0766df14-3ae7-4d0f-bed7-3de0628352d4",
+      "name": "Respond 404: Usuario no encontrado",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        864
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.manychat.com/fb/subscriber/setCustomFieldByName",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ subscriber_id: $('Webhook').item.json.subscriber_id, field_name: 'BotStatus', field_value: $('Webhook').item.json.bot_status === true }) }}",
+        "options": {}
+      },
+      "id": "187d04a6-82ca-4def-8c55-06bc5205572a",
+      "name": "HTTP: Actualizar BotStatus",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -208,
+        672
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fMntGTvhDGuMASNq",
+          "name": "Manychat API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: true, subscriber_id: $('Webhook').item.json.subscriber_id, bot_status: $('Webhook').item.json.bot_status }) }}",
+        "options": {}
+      },
+      "id": "fdfb439e-18b5-49d2-a8d7-03304eb0996a",
+      "name": "Respond 200: OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        16,
+        672
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "IF: Campos requeridos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Campos requeridos": {
+      "main": [
+        [
+          {
+            "node": "Get Subscriber Info",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond 400: Campos requeridos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Subscriber Info": {
+      "main": [
+        [
+          {
+            "node": "IF: Usuario no existe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Usuario no existe": {
+      "main": [
+        [
+          {
+            "node": "Respond 404: Usuario no encontrado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP: Actualizar BotStatus",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP: Actualizar BotStatus": {
+      "main": [
+        [
+          {
+            "node": "Respond 200: OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  }
+}

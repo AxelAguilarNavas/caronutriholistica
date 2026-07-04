@@ -9,6 +9,7 @@
 -- ───────────────────────────────────────────────────────────────────────
 DROP TRIGGER  IF EXISTS trg_normalize_answers   ON quiz_submissions;
 DROP FUNCTION IF EXISTS normalize_submission_answers();
+DROP TABLE    IF EXISTS messages              CASCADE;
 DROP TABLE    IF EXISTS submission_answers    CASCADE;
 DROP TABLE    IF EXISTS quiz_submissions      CASCADE;
 DROP TABLE    IF EXISTS question_options      CASCADE;
@@ -117,6 +118,20 @@ CREATE TABLE submission_answers (
   created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- Historial de mensajes WhatsApp (entrantes/salientes, Coco/Nora vía
+-- ManyChat). Destino de migración de la Data Table "Messages" de n8n
+-- (ver scripts/migration-messages.sql para el mapeo de columnas).
+CREATE TABLE messages (
+  id           SERIAL PRIMARY KEY,
+  client_id    INTEGER     REFERENCES clients(id) ON DELETE SET NULL,
+  user_id      TEXT        NOT NULL,
+  phone        TEXT,
+  orientation  TEXT        NOT NULL CHECK (orientation IN ('Incoming','Outgoing')),
+  message_text TEXT,
+  channel      TEXT,
+  sent_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 -- ───────────────────────────────────────────────────────────────────────
 -- ÍNDICES
 -- ───────────────────────────────────────────────────────────────────────
@@ -130,6 +145,11 @@ CREATE INDEX ON submission_answers (question_id);
 CREATE INDEX ON submission_answers (survey_id);
 CREATE INDEX ON submission_answers (option_id);
 CREATE INDEX ON quiz_submissions   USING GIN (raw_payload);
+CREATE INDEX ON messages           (client_id);
+CREATE INDEX ON messages           (user_id);
+CREATE INDEX ON messages           (phone);
+CREATE INDEX ON messages           (sent_at);
+CREATE INDEX ON messages           (orientation);
 
 -- ───────────────────────────────────────────────────────────────────────
 -- TRIGGER: normaliza raw_payload → submission_answers al insertar
