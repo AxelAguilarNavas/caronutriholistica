@@ -254,9 +254,11 @@ export default function Mensajeria() {
   );
 
   return (
-    <div className="page-wide messaging-layout">
-      {showList && conversationList}
-      {showConversation && conversationPane}
+    <div className="messaging-page">
+      <div className="messaging-layout">
+        {showList && conversationList}
+        {showConversation && conversationPane}
+      </div>
     </div>
   );
 }
