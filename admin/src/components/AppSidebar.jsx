@@ -4,6 +4,18 @@ import { initialsOf } from '../utils.js';
 
 function NavIcon({ type, active }) {
   const color = active ? '#0071e3' : '#8e8e93';
+  if (type === 'messages') {
+    return (
+      <div style={{ width: 26, height: 26, flex: 'none', position: 'relative' }}>
+        <div style={{ width: 24, height: 17, borderRadius: 6, border: `2px solid ${color}`, position: 'absolute', top: 0, left: 0 }} />
+        <div style={{
+          position: 'absolute', top: 14, left: 5, width: 0, height: 0,
+          borderLeft: '4px solid transparent', borderRight: '4px solid transparent', borderTop: `5px solid ${color}`,
+        }}
+        />
+      </div>
+    );
+  }
   if (type === 'clients') {
     return (
       <div style={{ width: 26, height: 26, flex: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
@@ -28,6 +40,7 @@ function NavIcon({ type, active }) {
 }
 
 const NAV_ITEMS = [
+  { key: 'messages', label: 'Mensajería', path: '/mensajeria' },
   { key: 'clients', label: 'Clientes', path: '/clientes' },
   { key: 'surveys', label: 'Encuestas', path: '/encuestas' },
   { key: 'plans', label: 'Planes', path: '/planes' },
@@ -41,7 +54,13 @@ export default function AppSidebar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const activeModule = pathname.startsWith('/encuestas') ? 'surveys' : pathname.startsWith('/planes') ? 'plans' : 'clients';
+  const activeModule = pathname.startsWith('/mensajeria')
+    ? 'messages'
+    : pathname.startsWith('/encuestas')
+    ? 'surveys'
+    : pathname.startsWith('/planes')
+    ? 'plans'
+    : 'clients';
   const expanded = isDesktop ? !sidebarCollapsed : true;
 
   const go = (path) => {

@@ -15,7 +15,13 @@ export default function TopBar() {
   let backTo = null;
 
   let match;
-  if ((match = m('/clientes/:id'))) {
+  if ((match = m('/mensajeria/:id'))) {
+    const client = clients.find((c) => String(c.id) === match.params.id);
+    pageTitle = client?.name || 'Conversación';
+    backTo = '/mensajeria';
+  } else if (m('/mensajeria')) {
+    pageTitle = 'Mensajería';
+  } else if ((match = m('/clientes/:id'))) {
     const client = clients.find((c) => String(c.id) === match.params.id);
     pageTitle = client?.name || 'Cliente';
     backTo = '/clientes';

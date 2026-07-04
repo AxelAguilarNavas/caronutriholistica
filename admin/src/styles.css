@@ -251,6 +251,51 @@ textarea.input { resize: vertical; font-size: 13.5px; }
   padding: 14px 16px; box-shadow: var(--shadow-card);
 }
 
+/* ═══ Mensajería ═══ */
+.messaging-layout { display: flex; align-items: flex-start; gap: 16px; }
+.messaging-list { width: 100%; flex: none; display: flex; flex-direction: column; gap: 10px; }
+.messaging-search { margin-bottom: 2px; }
+.messaging-list-scroll { display: flex; flex-direction: column; gap: 8px; }
+.messaging-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+@media (min-width: 1024px) {
+  .messaging-list { width: 300px; }
+  .messaging-list-scroll { max-height: calc(100vh - 230px); overflow-y: auto; padding-right: 2px; }
+}
+
+.conversation-item {
+  display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 14px;
+  padding: 12px 14px; box-shadow: var(--shadow-card); cursor: pointer; border: 2px solid transparent;
+}
+.conversation-item.active { border-color: var(--accent); }
+.conversation-preview {
+  font-size: 12.5px; color: var(--text-3); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.conversation-time { font-size: 11px; color: var(--text-4); flex: none; }
+
+.chat-window {
+  display: flex; flex-direction: column; gap: 10px; height: 420px;
+  overflow-y: auto; padding: 4px 4px 8px;
+}
+.chat-row { display: flex; }
+.chat-row.outgoing { justify-content: flex-end; }
+.chat-row.incoming { justify-content: flex-start; }
+.chat-bubble { max-width: 72%; padding: 9px 13px; border-radius: 16px; font-size: 13.5px; line-height: 1.4; }
+.chat-bubble.incoming { background: #f0f0f2; color: var(--text-1); border-bottom-left-radius: 4px; }
+.chat-bubble.outgoing { background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+.chat-bubble-time { font-size: 10.5px; margin-top: 4px; opacity: 0.7; }
+
+.chat-input-bar { display: flex; gap: 10px; align-items: flex-end; margin-top: 10px; }
+.chat-input-disabled {
+  flex: 1; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--border-input);
+  background: #f5f5f7; color: var(--text-4); font-size: 13.5px; cursor: not-allowed; resize: none;
+}
+.chat-send-btn-disabled {
+  border: none; background: #e5e5ea; color: #fff; border-radius: 10px; padding: 0 20px;
+  font-size: 13.5px; font-weight: 600; cursor: not-allowed; flex: none; height: 42px;
+}
+.wip-note { font-size: 11.5px; color: var(--text-4); margin-top: 8px; }
+
 /* ═══ Encuestas ═══ */
 .survey-card {
   display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 14px;

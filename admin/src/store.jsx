@@ -16,6 +16,10 @@ export function AppProvider({ children }) {
   const [submissions, setSubmissions] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  // ── Mensajería ──
+  const [messagePreviews, setMessagePreviews] = useState([]);
+  const [messagesByClient, setMessagesByClient] = useState({});
+
   // ── Layout ──
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -79,6 +83,7 @@ export function AppProvider({ children }) {
     setUser(null);
     setDataLoaded(false);
     setClients([]); setPlans([]); setSurveys([]); setSubmissions([]);
+    setMessagePreviews([]); setMessagesByClient({});
     setMobileSidebarOpen(false);
   }, []);
 
@@ -103,6 +108,18 @@ export function AppProvider({ children }) {
     const updated = await apiPatch(`/api/clients/${id}/nutrition-plan`, { nutrition_plan_text: text });
     setClients((cs) => cs.map((c) => (c.id === id ? updated : c)));
     return updated;
+  }, []);
+
+  // ── Mensajería ──
+  const loadMessagePreviews = useCallback(async () => {
+    const rows = await apiGet('/api/messages/latest');
+    setMessagePreviews(rows);
+  }, []);
+
+  const loadClientMessages = useCallback(async (id) => {
+    const rows = await apiGet(`/api/clients/${id}/messages`);
+    setMessagesByClient((m) => ({ ...m, [id]: rows }));
+    return rows;
   }, []);
 
   // ── Planes ──
@@ -167,6 +184,7 @@ export function AppProvider({ children }) {
     activeSubmission, setActiveSubmission,
     handleError,
     updateClient, setClientVip, saveNutritionPlan,
+    messagePreviews, messagesByClient, loadMessagePreviews, loadClientMessages,
     createPlan, updatePlan, deletePlan,
     createSurvey, updateSurvey, toggleSurveyActive, deleteSurvey,
     saveSubmissionAnswers, deleteSubmission,

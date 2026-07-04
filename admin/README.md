@@ -17,8 +17,8 @@ admin/
 ├── src/               # Frontend React
 │   ├── components/    # AppSidebar (único, reutilizable), TopBar, AppLayout,
 │   │                  # Switch, SubmissionModal, ConfirmModal, Toast
-│   ├── pages/         # Login, Clientes (list/detail), Encuestas (list/detail/
-│   │                  # respuestas/builder), Planes (list/detail/form)
+│   ├── pages/         # Login, Mensajería, Clientes (list/detail), Encuestas
+│   │                  # (list/detail/respuestas/builder), Planes (list/detail/form)
 │   ├── store.jsx      # estado global (datos + layout + modales)
 │   └── styles.css     # design tokens del handoff
 ├── migration-admin.sql
@@ -48,6 +48,7 @@ npm run dev             # API en :3001 + Vite en :5173 (proxy /api)
 - **`question_type`**: el constructor usa los 6 tipos del diseño (`short_text`, `long_text`, `single_choice`, `multiple_choice`, `yes_no`, `scale`). Los tipos legados del quiz (`checkbox`, `radio`, `select`, `text`, `severity`) siguen siendo válidos y se muestran con etiqueta en español; la encuesta del quiz tiene respuestas, por lo que su estructura queda bloqueada (regla de negocio del handoff).
 - **`vip_set_by`**: la tabla solo admite `manual`/`automatic`; el panel guarda `manual` y muestra "Marcado VIP manualmente el …".
 - **Reglas de negocio**: una encuesta con ≥1 respuesta no puede editarse ni eliminarse (validado en UI **y** en API con 409). El listado de clientes ordena VIP primero y luego alfabético con `localeCompare(..., 'es')`.
+- **Mensajería** (`/mensajeria`, `GET /api/messages/latest` y `GET /api/clients/:id/messages`): lee la tabla `messages` (ver `scripts/migration-messages.sql`). Es de solo lectura a propósito — el textbox y el botón de enviar están deshabilitados en la UI porque el envío desde el panel todavía no está conectado al pipeline real de n8n/ManyChat. Desde ahí también se puede ver el perfil del cliente, sus respuestas de encuesta y activar/desactivar su VIP (mismo mecanismo que en `ClientDetail`).
 
 ## Autenticación
 

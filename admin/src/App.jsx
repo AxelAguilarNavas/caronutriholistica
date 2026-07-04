@@ -4,6 +4,7 @@ import Login from './pages/Login.jsx';
 import AppLayout from './components/AppLayout.jsx';
 import ClientsList from './pages/ClientsList.jsx';
 import ClientDetail from './pages/ClientDetail.jsx';
+import Mensajeria from './pages/Mensajeria.jsx';
 import SurveysList from './pages/SurveysList.jsx';
 import SurveyDetail from './pages/SurveyDetail.jsx';
 import SurveyResponses from './pages/SurveyResponses.jsx';
@@ -21,6 +22,8 @@ export default function App() {
   return (
     <Routes>
       <Route element={<AppLayout />}>
+        <Route path="/mensajeria" element={<Mensajeria />} />
+        <Route path="/mensajeria/:id" element={<Mensajeria />} />
         <Route path="/clientes" element={<ClientsList />} />
         <Route path="/clientes/:id" element={<ClientDetail />} />
         <Route path="/encuestas" element={<SurveysList />} />

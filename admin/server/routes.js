@@ -137,6 +137,41 @@ api.patch('/clients/:id/nutrition-plan', async (req, res, next) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────
+// Mensajería (solo lectura por ahora — el envío está en construcción)
+// ─────────────────────────────────────────────────────────────────────
+api.get('/messages/latest', async (_req, res, next) => {
+  try {
+    const { rows } = await query(`
+      SELECT DISTINCT ON (m.user_id)
+        m.user_id, c.id AS client_id, m.message_text, m.orientation, m.sent_at
+      FROM messages m
+      LEFT JOIN clients c ON c.user_id = m.user_id
+      ORDER BY m.user_id, m.sent_at DESC
+    `);
+    res.json(rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+api.get('/clients/:id/messages', async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const clientRes = await query('SELECT user_id FROM clients WHERE id=$1', [id]);
+    if (!clientRes.rows.length) return res.status(404).json({ error: 'Cliente no encontrado' });
+    const userId = clientRes.rows[0].user_id;
+    const { rows } = await query(
+      `SELECT id, orientation, message_text, channel, sent_at FROM messages
+       WHERE client_id=$1 OR user_id=$2 ORDER BY sent_at ASC`,
+      [id, userId || '']
+    );
+    res.json(rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────
 // Planes
 // ─────────────────────────────────────────────────────────────────────
 api.post('/plans', async (req, res, next) => {
