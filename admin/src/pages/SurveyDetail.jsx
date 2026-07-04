@@ -1,0 +1,120 @@
+import { useNavigate, useParams } from 'react-router-dom';
+import { useApp } from '../store.jsx';
+import { questionTypeLabel, surveyQuestionsFlat } from '../utils.js';
+
+export default function SurveyDetail() {
+  const { id } = useParams();
+  const surveyId = Number(id);
+  const {
+    surveys, submissions, toggleSurveyActive, deleteSurvey,
+    setConfirmModal, showToast, handleError,
+  } = useApp();
+  const navigate = useNavigate();
+
+  const survey = surveys.find((sv) => sv.id === surveyId);
+  if (!survey) return <div className="empty-state">Encuesta no encontrada.</div>;
+
+  const responsesCount = submissions.filter((s) => s.survey_id === surveyId).length;
+  const locked = responsesCount > 0;
+  const allQuestions = surveyQuestionsFlat(survey);
+  const questionText = (qid) => allQuestions.find((q) => q.id === qid)?.question_text || '';
+
+  const onToggleActive = async () => {
+    try {
+      await toggleSurveyActive(surveyId);
+    } catch (err) {
+      handleError(err);
+    }
+  };
+
+  const requestDelete = () => {
+    setConfirmModal({
+      title: 'Eliminar encuesta',
+      message: '¿Seguro que quieres eliminar esta encuesta? Esta acción no se puede deshacer.',
+      onConfirm: async () => {
+        try {
+          await deleteSurvey(surveyId);
+          showToast('Encuesta eliminada');
+          navigate('/encuestas');
+        } catch (err) {
+          handleError(err);
+        }
+      },
+    });
+  };
+
+  return (
+    <div className="page-narrow">
+      <div className="card" style={{ padding: '22px 24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-0.3px' }}>{survey.name}</span>
+              <span className={`badge ${survey.is_active ? 'badge-active' : 'badge-inactive'}`}>
+                {survey.is_active ? 'Activa' : 'Inactiva'}
+              </span>
+            </div>
+            <div style={{ fontSize: 12.5, color: 'var(--text-3)', marginTop: 4 }}>
+              {[survey.slug, survey.version].filter(Boolean).join(' · ')}
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn-outline-sm" onClick={onToggleActive}>
+              {survey.is_active ? 'Desactivar' : 'Activar'}
+            </button>
+            {!locked && (
+              <>
+                <button className="btn-soft-blue md" onClick={() => navigate(`/encuestas/${surveyId}/editar`)}>
+                  Editar estructura
+                </button>
+                <button className="btn-soft-red md" onClick={requestDelete}>Eliminar</button>
+              </>
+            )}
+          </div>
+        </div>
+        {locked && (
+          <div className="locked-notice">
+            Esta encuesta ya tiene respuestas registradas — su estructura no puede editarse ni eliminarse.
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {survey.sections.map((sec, si) => (
+          <div key={sec.id ?? si} className="card" style={{ padding: '18px 22px' }}>
+            <div className="section-title">{sec.name}</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {sec.questions.map((q) => (
+                <div key={q.id} className="question-row">
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: 14, fontWeight: 500 }}>{q.question_text}</span>
+                    {q.is_required && (
+                      <span style={{ fontSize: 10.5, color: 'var(--danger)', fontWeight: 600 }}>obligatoria</span>
+                    )}
+                    <span style={{ fontSize: 10.5, color: 'var(--text-3)' }}>· {questionTypeLabel(q.question_type)}</span>
+                  </div>
+                  {q.is_conditional && (
+                    <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginTop: 2 }}>
+                      Condicional: se muestra si "{questionText(q.conditional_on)}" = {q.conditional_value}
+                    </div>
+                  )}
+                  {(q.options || []).length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
+                      {q.options.map((opt) => (
+                        <span key={opt.id} className="option-chip">{opt.option_text}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <button className="view-responses-btn" onClick={() => navigate(`/encuestas/${surveyId}/respuestas`)}>
+        Ver respuestas ({responsesCount})
+      </button>
+    </div>
+  );
+}

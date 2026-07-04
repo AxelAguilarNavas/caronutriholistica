@@ -1,0 +1,25 @@
+# Despliegue del panel admin. En Dokploy, conectar a la red del Postgres
+# dedicado (dokploy-network) para resolver el host interno.
+services:
+  admin:
+    build: .
+    image: caronutriholistica-admin:latest
+    container_name: caronutriholistica-admin
+    restart: unless-stopped
+    ports:
+      - "${ADMIN_PORT:-3001}:3001"
+    environment:
+      NUTRI_EMAIL: "${NUTRI_EMAIL}"
+      NUTRI_PASSWORD: "${NUTRI_PASSWORD}"
+      SESSION_SECRET: "${SESSION_SECRET}"
+      PGHOST: "${PGHOST:-carolina-marino-postgressql-dj2qmg}"
+      PGPORT: "${PGPORT:-5432}"
+      PGDATABASE: "${PGDATABASE:-PostgresSQL}"
+      PGUSER: "${PGUSER:-postgres}"
+      PGPASSWORD: "${PGPASSWORD}"
+    networks:
+      - dokploy-network
+
+networks:
+  dokploy-network:
+    external: true
