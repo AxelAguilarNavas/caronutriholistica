@@ -148,26 +148,26 @@ export default function Mensajeria() {
   ) : (
     <div className="messaging-main">
       <div className="card" style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-        <div className="avatar" style={{ width: 48, height: 48, fontSize: 16, background: avatarColor(client.id) }}>
-          {initialsOf(client.name)}
+        <div
+          onClick={() => setProfileOpen(true)}
+          style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 1, minWidth: 160, cursor: 'pointer' }}
+        >
+          <div className="avatar" style={{ width: 48, height: 48, fontSize: 16, background: avatarColor(client.id) }}>
+            {initialsOf(client.name)}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 16, fontWeight: 700 }}>{client.name || '(sin nombre)'}</span>
+              {client.is_vip && <span className="badge-vip">★ VIP</span>}
+            </div>
+            <div style={{ fontSize: 12.5, color: 'var(--text-3)', marginTop: 2 }}>
+              {[client.phone, client.channel].filter(Boolean).join(' · ') || '—'}
+            </div>
+          </div>
         </div>
-        <div style={{ flex: 1, minWidth: 160 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 16, fontWeight: 700 }}>{client.name || '(sin nombre)'}</span>
-            {client.is_vip && <span className="badge-vip">★ VIP</span>}
-          </div>
-          <div style={{ fontSize: 12.5, color: 'var(--text-3)', marginTop: 2 }}>
-            {[client.phone, client.channel].filter(Boolean).join(' · ') || '—'}
-          </div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-            <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 600 }}>Cliente VIP</span>
-            <Switch on={!!client.is_vip} onToggle={onToggleVip} />
-          </div>
-          <button className="btn-outline-sm" onClick={() => setProfileOpen(true)}>
-            Ver perfil ›
-          </button>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+          <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 600 }}>Cliente VIP</span>
+          <Switch on={!!client.is_vip} onToggle={onToggleVip} />
         </div>
         {showVipReasonInput && (
           <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8, animation: 'fadeIn 0.2s ease' }}>
