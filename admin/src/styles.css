@@ -24,6 +24,7 @@
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
 @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
 * { box-sizing: border-box; }
@@ -263,6 +264,18 @@ textarea.input { resize: vertical; font-size: 13.5px; }
   .messaging-list { width: 320px; flex: none; }
   .messaging-list-scroll { max-height: calc(100vh - 230px); overflow-y: auto; padding-right: 2px; }
 }
+
+.profile-drawer-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 65; animation: fadeIn 0.2s ease; }
+.profile-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 420px;
+  background: #fff; z-index: 66; display: flex; flex-direction: column;
+  box-shadow: var(--shadow-modal); animation: slideInRight 0.25s ease;
+}
+.profile-drawer-head {
+  padding: 16px 20px; border-bottom: 1px solid #f0f0f2; display: flex; align-items: center;
+  justify-content: space-between; flex: none;
+}
+.profile-drawer-body { padding: 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 24px; }
 
 .conversation-item {
   display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 14px;

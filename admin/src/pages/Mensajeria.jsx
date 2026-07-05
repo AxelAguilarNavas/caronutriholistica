@@ -27,6 +27,7 @@ export default function Mensajeria() {
   const [search, setSearch] = useState('');
   const [vipReasonDraft, setVipReasonDraft] = useState('');
   const [showVipReasonInput, setShowVipReasonInput] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   useEffect(() => {
     loadMessagePreviews().catch(() => {});
@@ -36,6 +37,7 @@ export default function Mensajeria() {
   useEffect(() => {
     if (clientId) {
       setShowVipReasonInput(false);
+      setProfileOpen(false);
       loadClientMessages(clientId).catch((err) => handleError(err));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,9 +160,14 @@ export default function Mensajeria() {
             {[client.phone, client.channel].filter(Boolean).join(' · ') || '—'}
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-          <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 600 }}>Cliente VIP</span>
-          <Switch on={!!client.is_vip} onToggle={onToggleVip} />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+            <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 600 }}>Cliente VIP</span>
+            <Switch on={!!client.is_vip} onToggle={onToggleVip} />
+          </div>
+          <button className="btn-outline-sm" onClick={() => setProfileOpen(true)}>
+            Ver perfil ›
+          </button>
         </div>
         {showVipReasonInput && (
           <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8, animation: 'fadeIn 0.2s ease' }}>
@@ -203,54 +210,77 @@ export default function Mensajeria() {
         </div>
         <div className="wip-note">El envío de mensajes desde el panel está en construcción.</div>
       </div>
-
-      <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div className="card-title">Perfil del cliente</div>
-          <button className="btn-soft-blue" onClick={() => navigate(`/clientes/${client.id}`)}>Editar perfil completo</button>
-        </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px 20px' }}>
-          <ProfileField label="Correo electrónico" value={client.email} />
-          <ProfileField label="Teléfono" value={client.phone} />
-          <ProfileField label="Plataforma de origen" value={client.source_platform} />
-          <ProfileField label="Plan" value={planName} />
-          <ProfileField label="Estado del plan" value={planStatusLabel(client.plan_status)} />
-        </div>
-        {client.notes && (
-          <div>
-            <div className="field-label">Notas</div>
-            <div style={{ marginTop: 3, fontSize: 13.5, color: 'var(--text-2)' }}>{client.notes}</div>
-          </div>
-        )}
-      </div>
-
-      <div className="card">
-        <div className="card-title" style={{ marginBottom: 12 }}>Respuestas a encuestas ({clientSubs.length})</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {clientSubs.map((sub) => (
-            <div
-              key={sub.id}
-              className="submission-row"
-              style={{ cursor: 'pointer' }}
-              onClick={() => setActiveSubmission({ id: sub.id, editing: false })}
-            >
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 13.5, fontWeight: 600 }}>{surveyName(sub.survey_id)}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 1 }}>
-                  {fmtDate(sub.submitted_at)} · {sub.is_complete ? 'Completa' : 'Incompleta'}
-                </div>
-              </div>
-              <div className="chevron-right">›</div>
-            </div>
-          ))}
-          {clientSubs.length === 0 && (
-            <div style={{ textAlign: 'center', padding: 20, color: 'var(--text-3)', fontSize: 13 }}>
-              Este cliente no ha respondido encuestas todavía.
-            </div>
-          )}
-        </div>
-      </div>
     </div>
+  );
+
+  const profileDrawer = profileOpen && client && (
+    <>
+      <div className="profile-drawer-backdrop" onClick={() => setProfileOpen(false)} />
+      <div className="profile-drawer">
+        <div className="profile-drawer-head">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div className="avatar" style={{ width: 40, height: 40, fontSize: 13.5, background: avatarColor(client.id) }}>
+              {initialsOf(client.name)}
+            </div>
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 700 }}>{client.name || '(sin nombre)'}</div>
+              <div style={{ fontSize: 12, color: 'var(--text-3)' }}>Perfil del cliente</div>
+            </div>
+          </div>
+          <button className="modal-close" onClick={() => setProfileOpen(false)}>✕</button>
+        </div>
+
+        <div className="profile-drawer-body">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div className="card-title">Información del cliente</div>
+              <button className="btn-soft-blue" onClick={() => navigate(`/clientes/${client.id}`)}>Editar perfil completo</button>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px 20px' }}>
+              <ProfileField label="Correo electrónico" value={client.email} />
+              <ProfileField label="Teléfono" value={client.phone} />
+              <ProfileField label="Canal" value={client.channel} />
+              <ProfileField label="Plataforma de origen" value={client.source_platform} />
+              <ProfileField label="Plan" value={planName} />
+              <ProfileField label="Estado del plan" value={planStatusLabel(client.plan_status)} />
+            </div>
+            {client.notes && (
+              <div>
+                <div className="field-label">Notas</div>
+                <div style={{ marginTop: 3, fontSize: 13.5, color: 'var(--text-2)' }}>{client.notes}</div>
+              </div>
+            )}
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div className="card-title">Respuestas a encuestas ({clientSubs.length})</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {clientSubs.map((sub) => (
+                <div
+                  key={sub.id}
+                  className="submission-row"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setActiveSubmission({ id: sub.id, editing: false })}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13.5, fontWeight: 600 }}>{surveyName(sub.survey_id)}</div>
+                    <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 1 }}>
+                      {fmtDate(sub.submitted_at)} · {sub.is_complete ? 'Completa' : 'Incompleta'}
+                    </div>
+                  </div>
+                  <div className="chevron-right">›</div>
+                </div>
+              ))}
+              {clientSubs.length === 0 && (
+                <div style={{ textAlign: 'center', padding: 20, color: 'var(--text-3)', fontSize: 13 }}>
+                  Este cliente no ha respondido encuestas todavía.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 
   return (
@@ -259,6 +289,7 @@ export default function Mensajeria() {
         {showList && conversationList}
         {showConversation && conversationPane}
       </div>
+      {profileDrawer}
     </div>
   );
 }
