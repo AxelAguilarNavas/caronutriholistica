@@ -25,4 +25,9 @@ ALTER TABLE questions ADD CONSTRAINT questions_question_type_check
   CHECK (question_type IN ('checkbox','radio','select','text','severity',
                            'short_text','long_text','single_choice','multiple_choice','yes_no','scale'));
 
+-- 4. bot_enabled: permite pausar/reactivar el bot de WhatsApp por cliente
+--    desde el panel; se sincroniza con el custom field BotStatus de
+--    ManyChat vía admin/server/manychat.js (ver CLAUDE.md)
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS bot_enabled BOOLEAN NOT NULL DEFAULT TRUE;
+
 COMMIT;

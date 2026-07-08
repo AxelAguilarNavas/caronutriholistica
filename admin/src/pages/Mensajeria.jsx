@@ -19,7 +19,7 @@ export default function Mensajeria() {
   const navigate = useNavigate();
   const {
     clients, plans, submissions, surveys,
-    isDesktop, setClientVip, showToast, handleError,
+    isDesktop, setClientVip, setClientBotStatus, syncClientBotStatus, showToast, handleError,
     messagePreviews, messagesByClient, loadMessagePreviews, loadClientMessages,
     setActiveSubmission,
   } = useApp();
@@ -39,6 +39,7 @@ export default function Mensajeria() {
       setShowVipReasonInput(false);
       setProfileOpen(false);
       loadClientMessages(clientId).catch((err) => handleError(err));
+      syncClientBotStatus(clientId).catch(() => {});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clientId]);
@@ -75,6 +76,19 @@ export default function Mensajeria() {
       setShowVipReasonInput(turningOn);
       setVipReasonDraft(turningOn ? client.vip_reason || '' : '');
       showToast(turningOn ? 'Cliente marcado como VIP' : 'Cliente ya no es VIP');
+    } catch (err) {
+      handleError(err);
+    }
+  };
+
+  const onToggleBot = async () => {
+    const turningOn = !client.bot_enabled;
+    try {
+      const res = await setClientBotStatus(client.id, turningOn);
+      showToast(
+        (turningOn ? 'Bot reactivado' : 'Bot pausado') +
+        (res.syncError ? ` (no se sincronizó con ManyChat: ${res.syncError})` : '')
+      );
     } catch (err) {
       handleError(err);
     }
@@ -168,6 +182,10 @@ export default function Mensajeria() {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
           <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 600 }}>Cliente VIP</span>
           <Switch on={!!client.is_vip} onToggle={onToggleVip} />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+          <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 600 }}>Bot activo</span>
+          <Switch on={!!client.bot_enabled} onToggle={onToggleBot} blue />
         </div>
         {showVipReasonInput && (
           <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8, animation: 'fadeIn 0.2s ease' }}>

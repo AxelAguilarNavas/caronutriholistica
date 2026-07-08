@@ -104,6 +104,18 @@ export function AppProvider({ children }) {
     return updated;
   }, []);
 
+  const setClientBotStatus = useCallback(async (id, botEnabled) => {
+    const res = await apiPatch(`/api/clients/${id}/bot-status`, { bot_enabled: botEnabled });
+    setClients((cs) => cs.map((c) => (c.id === id ? res.client : c)));
+    return res;
+  }, []);
+
+  const syncClientBotStatus = useCallback(async (id) => {
+    const res = await apiPost(`/api/clients/${id}/bot-status/sync`);
+    if (res.client) setClients((cs) => cs.map((c) => (c.id === id ? res.client : c)));
+    return res;
+  }, []);
+
   const saveNutritionPlan = useCallback(async (id, text) => {
     const updated = await apiPatch(`/api/clients/${id}/nutrition-plan`, { nutrition_plan_text: text });
     setClients((cs) => cs.map((c) => (c.id === id ? updated : c)));
@@ -183,7 +195,7 @@ export function AppProvider({ children }) {
     toast, showToast, confirmModal, setConfirmModal,
     activeSubmission, setActiveSubmission,
     handleError,
-    updateClient, setClientVip, saveNutritionPlan,
+    updateClient, setClientVip, setClientBotStatus, syncClientBotStatus, saveNutritionPlan,
     messagePreviews, messagesByClient, loadMessagePreviews, loadClientMessages,
     createPlan, updatePlan, deletePlan,
     createSurvey, updateSurvey, toggleSurveyActive, deleteSurvey,

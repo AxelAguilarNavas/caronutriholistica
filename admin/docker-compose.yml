@@ -17,6 +17,7 @@ services:
       PGDATABASE: "${PGDATABASE:-PostgresSQL}"
       PGUSER: "${PGUSER:-postgres}"
       PGPASSWORD: "${PGPASSWORD}"
+      MANYCHAT_API_TOKEN: "${MANYCHAT_API_TOKEN}"
     networks:
       - dokploy-network
 

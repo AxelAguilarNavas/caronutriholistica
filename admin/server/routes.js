@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { pool, query } from './db.js';
 import { requireAuth, isValidEmail } from './auth.js';
+import * as manychat from './manychat.js';
 
 export const api = Router();
 api.use(requireAuth);
@@ -115,6 +116,64 @@ api.patch('/clients/:id/vip', async (req, res, next) => {
         );
     if (!rows.length) return res.status(404).json({ error: 'Cliente no encontrado' });
     res.json(rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+api.patch('/clients/:id/bot-status', async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const { bot_enabled } = req.body || {};
+    if (typeof bot_enabled !== 'boolean') return bad(res, 'bot_enabled debe ser booleano');
+
+    const current = await query('SELECT user_id FROM clients WHERE id=$1', [id]);
+    if (!current.rows.length) return res.status(404).json({ error: 'Cliente no encontrado' });
+    const subscriberId = current.rows[0].user_id;
+
+    let synced = false, syncError = null;
+    if (!subscriberId) {
+      syncError = 'El cliente no tiene user_id de ManyChat; solo se guardó en el panel';
+    } else {
+      try {
+        await manychat.setBotStatus(subscriberId, bot_enabled);
+        synced = true;
+      } catch (e) {
+        syncError = e.message;
+      }
+    }
+
+    const { rows } = await query(
+      `UPDATE clients SET bot_enabled=$1, updated_at=NOW() WHERE id=$2 RETURNING *`,
+      [bot_enabled, id]
+    );
+    res.json({ client: rows[0], synced, syncError });
+  } catch (err) {
+    next(err);
+  }
+});
+
+api.post('/clients/:id/bot-status/sync', async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const current = await query('SELECT user_id, bot_enabled FROM clients WHERE id=$1', [id]);
+    if (!current.rows.length) return res.status(404).json({ error: 'Cliente no encontrado' });
+    const { user_id: subscriberId, bot_enabled: localValue } = current.rows[0];
+    if (!subscriberId) return res.json({ client: null, synced: false });
+
+    let remoteValue;
+    try {
+      remoteValue = await manychat.getBotStatus(subscriberId);
+    } catch {
+      return res.json({ client: null, synced: false });
+    }
+    if (remoteValue === localValue) return res.json({ client: null, synced: true });
+
+    const { rows } = await query(
+      `UPDATE clients SET bot_enabled=$1, updated_at=NOW() WHERE id=$2 RETURNING *`,
+      [remoteValue, id]
+    );
+    res.json({ client: rows[0], synced: true });
   } catch (err) {
     next(err);
   }

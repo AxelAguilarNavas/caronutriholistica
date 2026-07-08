@@ -47,6 +47,7 @@ CREATE TABLE clients (
   vip_set_by       TEXT        CHECK (vip_set_by IN ('manual','automatic')),
   vip_reason       TEXT,
   vip_set_at       TIMESTAMPTZ,
+  bot_enabled      BOOLEAN     NOT NULL DEFAULT TRUE,
   notes            TEXT,
   created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()

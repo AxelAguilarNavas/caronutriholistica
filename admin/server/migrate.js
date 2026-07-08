@@ -23,6 +23,7 @@ const STATEMENTS = [
   `ALTER TABLE questions ADD CONSTRAINT questions_question_type_check
      CHECK (question_type IN ('checkbox','radio','select','text','severity',
                               'short_text','long_text','single_choice','multiple_choice','yes_no','scale'))`,
+  `ALTER TABLE clients ADD COLUMN IF NOT EXISTS bot_enabled BOOLEAN NOT NULL DEFAULT TRUE`,
 ];
 
 export async function migrate() {

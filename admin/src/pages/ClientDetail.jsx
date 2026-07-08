@@ -12,7 +12,7 @@ export default function ClientDetail() {
   const clientId = Number(id);
   const {
     clients, plans, submissions, surveys,
-    updateClient, setClientVip, saveNutritionPlan,
+    updateClient, setClientVip, setClientBotStatus, syncClientBotStatus, saveNutritionPlan,
     setActiveSubmission, setConfirmModal, deleteSubmission,
     showToast, handleError,
   } = useApp();
@@ -43,6 +43,11 @@ export default function ClientDetail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clientId, !!client]);
 
+  useEffect(() => {
+    if (clientId) syncClientBotStatus(clientId).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clientId]);
+
   if (!client || !draft) return <div className="empty-state">Cliente no encontrado.</div>;
 
   const planName = plans.find((p) => p.id === client.plan_id)?.name || '—';
@@ -63,6 +68,19 @@ export default function ClientDetail() {
       setShowVipReasonInput(turningOn);
       setVipReasonDraft(turningOn ? client.vip_reason || '' : '');
       showToast(turningOn ? 'Cliente marcado como VIP' : 'Cliente ya no es VIP');
+    } catch (err) {
+      handleError(err);
+    }
+  };
+
+  const onToggleBot = async () => {
+    const turningOn = !client.bot_enabled;
+    try {
+      const res = await setClientBotStatus(clientId, turningOn);
+      showToast(
+        (turningOn ? 'Bot reactivado' : 'Bot pausado') +
+        (res.syncError ? ` (no se sincronizó con ManyChat: ${res.syncError})` : '')
+      );
     } catch (err) {
       handleError(err);
     }
@@ -160,6 +178,19 @@ export default function ClientDetail() {
           </div>
         )}
         {vipMeta && <div style={{ marginTop: 10, fontSize: 12, color: 'var(--text-3)' }}>{vipMeta}</div>}
+      </div>
+
+      {/* 2.5 Bot de WhatsApp */}
+      <div className="card">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div className="card-title">Bot de WhatsApp</div>
+          <Switch on={!!client.bot_enabled} onToggle={onToggleBot} blue />
+        </div>
+        <div style={{ marginTop: 10, fontSize: 12, color: 'var(--text-3)' }}>
+          {client.bot_enabled
+            ? 'El bot responde automáticamente a este cliente.'
+            : 'El bot está pausado para este cliente — tú respondes manualmente.'}
+        </div>
       </div>
 
       {/* 3. Información del cliente */}

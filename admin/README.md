@@ -38,8 +38,8 @@ npm run dev             # API en :3001 + Vite en :5173 (proxy /api)
 ## Producción (VPS / Dokploy)
 
 1. La base es el Postgres dedicado existente (`carolina-marino-postgressql-dj2qmg`, db `PostgresSQL`). El contenedor del panel debe estar en la misma red Docker (`dokploy-network`) para resolver ese host.
-2. Variables de entorno requeridas: `NUTRI_EMAIL`, `NUTRI_PASSWORD`, `SESSION_SECRET`, `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD` (ver `.env.example`; la contraseña está en Dokploy > carolina-marino-postgresql > Internal Credentials).
-3. La migración (`migration-admin.sql`) es idempotente y **se aplica sola al arrancar el servidor**. No borra ni modifica datos existentes: agrega `clients.nutrition_plan_text` / `nutrition_plan_updated_at` y amplía dos constraints CHECK.
+2. Variables de entorno requeridas: `NUTRI_EMAIL`, `NUTRI_PASSWORD`, `SESSION_SECRET`, `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`, `MANYCHAT_API_TOKEN` (ver `.env.example`; la contraseña de Postgres está en Dokploy > carolina-marino-postgresql > Internal Credentials; el token de ManyChat se obtiene desde el panel de ManyChat, Settings → API — es el mismo que usa la credencial "Manychat API" en n8n, pero n8n no lo expone, así que hay que copiarlo aparte).
+3. La migración (`migration-admin.sql`) es idempotente y **se aplica sola al arrancar el servidor**. No borra ni modifica datos existentes: agrega `clients.nutrition_plan_text` / `nutrition_plan_updated_at` / `bot_enabled` y amplía dos constraints CHECK.
 4. Deploy en Dokploy: nuevo servicio Compose apuntando a `admin/docker-compose.yml` (o Application con buildType dockerfile y `admin/Dockerfile`), más un domain con HTTPS hacia el puerto 3001.
 
 ## Decisiones de mapeo (diseño ↔ esquema real)
@@ -49,6 +49,7 @@ npm run dev             # API en :3001 + Vite en :5173 (proxy /api)
 - **`vip_set_by`**: la tabla solo admite `manual`/`automatic`; el panel guarda `manual` y muestra "Marcado VIP manualmente el …".
 - **Reglas de negocio**: una encuesta con ≥1 respuesta no puede editarse ni eliminarse (validado en UI **y** en API con 409). El listado de clientes ordena VIP primero y luego alfabético con `localeCompare(..., 'es')`.
 - **Mensajería** (`/mensajeria`, `GET /api/messages/latest` y `GET /api/clients/:id/messages`): lee la tabla `messages` (ver `scripts/migration-messages.sql`). Es de solo lectura a propósito — el textbox y el botón de enviar están deshabilitados en la UI porque el envío desde el panel todavía no está conectado al pipeline real de n8n/ManyChat. Desde ahí también se puede ver el perfil del cliente, sus respuestas de encuesta y activar/desactivar su VIP (mismo mecanismo que en `ClientDetail`).
+- **Bot de WhatsApp por cliente** (`clients.bot_enabled`, `PATCH /api/clients/:id/bot-status` y `POST /api/clients/:id/bot-status/sync`): permite pausar/reactivar el bot de IA para un cliente puntual. El panel habla directo con la API de ManyChat vía `admin/server/manychat.js` (token propio en `MANYCHAT_API_TOKEN`, sin pasar por n8n) para escribir/leer el custom field `BotStatus` — el mismo que ya leen `ChatBot.json` y `Send Messages` en n8n. Al abrir la ficha de un cliente (`ClientDetail` o `Mensajería`) se reconcilia automáticamente `bot_enabled` con el valor real de ManyChat, por si cambió por fuera del panel.
 
 ## Autenticación
 
