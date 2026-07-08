@@ -179,13 +179,15 @@ export default function Mensajeria() {
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-          <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 600 }}>Cliente VIP</span>
-          <Switch on={!!client.is_vip} onToggle={onToggleVip} />
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-          <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 600 }}>Bot activo</span>
-          <Switch on={!!client.bot_enabled} onToggle={onToggleBot} blue />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+            <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 600 }}>Cliente VIP</span>
+            <Switch on={!!client.is_vip} onToggle={onToggleVip} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+            <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 600 }}>Bot activo</span>
+            <Switch on={!!client.bot_enabled} onToggle={onToggleBot} blue />
+          </div>
         </div>
         {showVipReasonInput && (
           <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8, animation: 'fadeIn 0.2s ease' }}>
