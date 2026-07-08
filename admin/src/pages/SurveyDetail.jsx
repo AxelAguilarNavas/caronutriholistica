@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useApp } from '../store.jsx';
 import { questionTypeLabel, surveyQuestionsFlat, surveyShareLink } from '../utils.js';
@@ -6,10 +7,14 @@ export default function SurveyDetail() {
   const { id } = useParams();
   const surveyId = Number(id);
   const {
-    surveys, submissions, toggleSurveyActive, deleteSurvey,
+    surveys, submissions, clients, toggleSurveyActive, deleteSurvey,
     setConfirmModal, showToast, handleError,
   } = useApp();
   const navigate = useNavigate();
+
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [clientSearch, setClientSearch] = useState('');
+  const pickerRef = useRef(null);
 
   const survey = surveys.find((sv) => sv.id === surveyId);
   if (!survey) return <div className="empty-state">Encuesta no encontrada.</div>;
@@ -19,6 +24,15 @@ export default function SurveyDetail() {
   const allQuestions = surveyQuestionsFlat(survey);
   const questionText = (qid) => allQuestions.find((q) => q.id === qid)?.question_text || '';
 
+  useEffect(() => {
+    if (!pickerOpen) return;
+    const onClickOutside = (e) => {
+      if (pickerRef.current && !pickerRef.current.contains(e.target)) setPickerOpen(false);
+    };
+    document.addEventListener('mousedown', onClickOutside);
+    return () => document.removeEventListener('mousedown', onClickOutside);
+  }, [pickerOpen]);
+
   const onToggleActive = async () => {
     try {
       await toggleSurveyActive(surveyId);
@@ -27,16 +41,27 @@ export default function SurveyDetail() {
     }
   };
 
-  const onCopyLink = async () => {
+  const onPickClient = async (client) => {
+    setPickerOpen(false);
+    setClientSearch('');
     try {
-      await navigator.clipboard.writeText(surveyShareLink(survey, null));
-      showToast(survey.slug === 'nutribalance-v1'
-        ? 'Enlace copiado'
-        : 'Enlace copiado — completa el userId antes de enviarlo');
+      await navigator.clipboard.writeText(surveyShareLink(survey, client));
+      showToast(client.user_id
+        ? `Enlace copiado para ${client.name || 'este cliente'}`
+        : 'Enlace copiado — este cliente no tiene usuario de WhatsApp/ManyChat, la encuesta no cargará hasta completar el userId');
     } catch (err) {
       handleError(err);
     }
   };
+
+  const term = clientSearch.trim().toLowerCase();
+  const filteredClients = clients.filter(
+    (c) =>
+      !term ||
+      (c.name || '').toLowerCase().includes(term) ||
+      (c.email || '').toLowerCase().includes(term) ||
+      (c.phone || '').toLowerCase().includes(term)
+  );
 
   const requestDelete = () => {
     setConfirmModal({
@@ -70,16 +95,63 @@ export default function SurveyDetail() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn-outline-sm" style={{ display: 'flex', alignItems: 'center', gap: 6 }} onClick={onCopyLink}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="18" cy="5" r="3" />
-                <circle cx="6" cy="12" r="3" />
-                <circle cx="18" cy="19" r="3" />
-                <line x1="8.6" y1="10.5" x2="15.4" y2="6.5" />
-                <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" />
-              </svg>
-              Compartir
-            </button>
+            <div ref={pickerRef} style={{ position: 'relative' }}>
+              <button className="btn-outline-sm" style={{ display: 'flex', alignItems: 'center', gap: 6 }} onClick={() => setPickerOpen((o) => !o)}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="18" cy="5" r="3" />
+                  <circle cx="6" cy="12" r="3" />
+                  <circle cx="18" cy="19" r="3" />
+                  <line x1="8.6" y1="10.5" x2="15.4" y2="6.5" />
+                  <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" />
+                </svg>
+                Compartir
+              </button>
+              {pickerOpen && (
+                <div
+                  style={{
+                    position: 'absolute', top: 'calc(100% + 6px)', left: 0, zIndex: 30,
+                    background: '#fff', border: '1px solid var(--border-input)', borderRadius: 10,
+                    boxShadow: 'var(--shadow-modal)', width: 260, padding: 10,
+                  }}
+                >
+                  <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginBottom: 8, lineHeight: 1.5 }}>
+                    Elige a qué cliente le vas a compartir esta encuesta — el link necesita su usuario de WhatsApp/ManyChat para poder cargar y guardar la respuesta.
+                  </div>
+                  <input
+                    className="input"
+                    style={{ marginBottom: 8 }}
+                    autoFocus
+                    placeholder="Buscar cliente…"
+                    value={clientSearch}
+                    onChange={(e) => setClientSearch(e.target.value)}
+                  />
+                  <div style={{ maxHeight: 220, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+                    {filteredClients.map((c) => (
+                      <button
+                        key={c.id}
+                        onClick={() => onPickClient(c)}
+                        style={{
+                          display: 'block', width: '100%', textAlign: 'left', padding: '8px 6px',
+                          border: 'none', background: 'none', cursor: 'pointer', fontSize: 13,
+                          borderBottom: '1px solid var(--border-sep)',
+                        }}
+                      >
+                        <div style={{ fontWeight: 600 }}>{c.name || '(sin nombre)'}</div>
+                        <div style={{ fontSize: 11.5, color: 'var(--text-3)' }}>
+                          {[c.phone, c.email].filter(Boolean).join(' · ') || '—'}
+                          {!c.user_id && ' · sin WhatsApp'}
+                        </div>
+                      </button>
+                    ))}
+                    {filteredClients.length === 0 && (
+                      <div style={{ fontSize: 12.5, color: 'var(--text-3)', textAlign: 'center', padding: 10 }}>
+                        Sin clientes que coincidan.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
             <button className="btn-outline-sm" onClick={onToggleActive}>
               {survey.is_active ? 'Desactivar' : 'Activar'}
             </button>
