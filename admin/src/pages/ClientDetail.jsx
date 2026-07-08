@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useApp } from '../store.jsx';
 import Switch from '../components/Switch.jsx';
+import ShareSurveyButton from '../components/ShareSurveyButton.jsx';
 import {
   avatarColor, fmtDate, initialsOf, isValidEmail,
   planStatusLabel, PLAN_STATUS_OPTIONS,
@@ -154,6 +155,7 @@ export default function ClientDetail() {
             {[client.channel, `Plan ${planName}`, planStatusLabel(client.plan_status)].filter(Boolean).join(' · ')}
           </div>
         </div>
+        <ShareSurveyButton client={client} />
       </div>
 
       {/* 2. Cliente VIP */}

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useApp } from '../store.jsx';
 import Switch from '../components/Switch.jsx';
+import ShareSurveyButton from '../components/ShareSurveyButton.jsx';
 import { avatarColor, fmtDate, fmtTime, initialsOf, planStatusLabel } from '../utils.js';
 
 function ProfileField({ label, value }) {
@@ -180,6 +181,7 @@ export default function Mensajeria() {
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          <ShareSurveyButton client={client} />
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
             <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontWeight: 600 }}>Cliente VIP</span>
             <Switch on={!!client.is_vip} onToggle={onToggleVip} />
@@ -252,9 +254,12 @@ export default function Mensajeria() {
 
         <div className="profile-drawer-body">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
               <div className="card-title">Información del cliente</div>
-              <button className="btn-soft-blue" onClick={() => navigate(`/clientes/${client.id}`)}>Editar perfil completo</button>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <ShareSurveyButton client={client} />
+                <button className="btn-soft-blue" onClick={() => navigate(`/clientes/${client.id}`)}>Editar perfil completo</button>
+              </div>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px 20px' }}>
               <ProfileField label="Correo electrónico" value={client.email} />

@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useApp } from '../store.jsx';
-import { questionTypeLabel, surveyQuestionsFlat } from '../utils.js';
+import { questionTypeLabel, surveyQuestionsFlat, surveyShareLink } from '../utils.js';
 
 export default function SurveyDetail() {
   const { id } = useParams();
@@ -22,6 +22,17 @@ export default function SurveyDetail() {
   const onToggleActive = async () => {
     try {
       await toggleSurveyActive(surveyId);
+    } catch (err) {
+      handleError(err);
+    }
+  };
+
+  const onCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(surveyShareLink(survey, null));
+      showToast(survey.slug === 'nutribalance-v1'
+        ? 'Enlace copiado'
+        : 'Enlace copiado — completa el userId antes de enviarlo');
     } catch (err) {
       handleError(err);
     }
@@ -59,6 +70,16 @@ export default function SurveyDetail() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn-outline-sm" style={{ display: 'flex', alignItems: 'center', gap: 6 }} onClick={onCopyLink}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="18" cy="5" r="3" />
+                <circle cx="6" cy="12" r="3" />
+                <circle cx="18" cy="19" r="3" />
+                <line x1="8.6" y1="10.5" x2="15.4" y2="6.5" />
+                <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" />
+              </svg>
+              Compartir
+            </button>
             <button className="btn-outline-sm" onClick={onToggleActive}>
               {survey.is_active ? 'Desactivar' : 'Activar'}
             </button>

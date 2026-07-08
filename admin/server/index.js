@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const { api } = await import('./routes.js');
+const { publicApi } = await import('./publicRoutes.js');
 const { migrate } = await import('./migrate.js');
 const { createToken, verifyToken, checkCredentials, isValidEmail } = await import('./auth.js');
 
@@ -46,6 +47,9 @@ app.get('/api/me', (req, res) => {
   if (!session) return res.status(401).json({ error: 'No autenticado' });
   res.json({ email: session.email });
 });
+
+// ── API pública (visualizador de encuestas, sin login) ──
+app.use('/api/public', publicApi);
 
 // ── API protegida ──
 app.use('/api', api);

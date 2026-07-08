@@ -97,6 +97,19 @@ export function slugify(text) {
     .replace(/(^-|-$)/g, '');
 }
 
+// Link para compartir una encuesta. nutribalance-v1 mantiene su flujo
+// dedicado (evaluacion.html en el dominio raíz + pipeline de n8n); el
+// resto usa el visualizador público /encuesta de este panel. Sin cliente,
+// userId queda vacío y hay que completarlo antes de enviar el link.
+export function surveyShareLink(survey, client) {
+  const userId = client?.user_id || '';
+  const sourcePlatform = client?.source_platform || 'manychat';
+  if (survey.slug === 'nutribalance-v1') {
+    return `https://www.caronutriholistica.tech/?userId=${encodeURIComponent(userId)}&sourcePlatform=${encodeURIComponent(sourcePlatform)}&channel=${encodeURIComponent(client?.channel || 'whatsapp')}`;
+  }
+  return `${window.location.origin}/encuesta?slug=${encodeURIComponent(survey.slug)}&userId=${encodeURIComponent(userId)}&sourcePlatform=${encodeURIComponent(sourcePlatform)}`;
+}
+
 export function surveyQuestionsFlat(survey) {
   const out = [];
   (survey?.sections || []).forEach((sec) => (sec.questions || []).forEach((q) => out.push(q)));

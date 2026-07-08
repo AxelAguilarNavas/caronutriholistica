@@ -14,6 +14,7 @@ async function request(method, url, body) {
   if (!res.ok) {
     const err = new Error(data?.error || `Error ${res.status}`);
     err.status = res.status;
+    err.data = data;
     throw err;
   }
   return data;
