@@ -160,25 +160,13 @@ export default function SurveyBuilder({ mode }) {
           <input
             className="input field"
             value={draft.name}
-            onChange={(e) =>
-              setDraft((d) => ({
-                ...d,
-                name: e.target.value,
-                slug: mode === 'create' ? slugify(e.target.value) : d.slug,
-              }))
-            }
+            onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
             placeholder="Ej. Evaluación Inicial"
           />
         </div>
-        <div style={{ display: 'flex', gap: 12 }}>
-          <div style={{ flex: 1 }}>
-            <label className="field-label">Slug</label>
-            <input className="input field" value={draft.slug} onChange={(e) => setDraft((d) => ({ ...d, slug: e.target.value }))} />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label className="field-label">Versión</label>
-            <input className="input field" value={draft.version} onChange={(e) => setDraft((d) => ({ ...d, version: e.target.value }))} />
-          </div>
+        <div>
+          <label className="field-label">Versión</label>
+          <input className="input field" style={{ maxWidth: 160 }} value={draft.version} onChange={(e) => setDraft((d) => ({ ...d, version: e.target.value }))} />
         </div>
       </div>
 
