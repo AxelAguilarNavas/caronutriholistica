@@ -110,25 +110,28 @@ export default function SurveyBuilder({ mode }) {
 
   const onSave = async () => {
     if (!draft.name.trim()) { showToast('El nombre de la encuesta es obligatorio'); return; }
+    const totalQuestions = draft.sections.reduce((n, sec) => n + sec.questions.length, 0);
+    if (totalQuestions === 0) {
+      showToast('Agrega al menos una pregunta');
+      return;
+    }
+    if (draft.sections.some((sec) => sec.questions.some((q) => !q.question_text.trim()))) {
+      showToast('Completa el texto de todas las preguntas');
+      return;
+    }
     const payload = {
       name: draft.name,
       slug: draft.slug || slugify(draft.name),
       version: draft.version || 'v1',
       sections: draft.sections.map((sec) => ({
         name: sec.name,
-        questions: sec.questions
-          .filter((q) => q.question_text.trim())
-          .map((q) => ({
-            ...q,
-            conditional_on: q.is_conditional && q.conditional_on !== '' ? Number(q.conditional_on) : null,
-            options: q.options.filter((o) => o.option_text.trim()),
-          })),
+        questions: sec.questions.map((q) => ({
+          ...q,
+          conditional_on: q.is_conditional && q.conditional_on !== '' ? Number(q.conditional_on) : null,
+          options: q.options.filter((o) => o.option_text.trim()),
+        })),
       })).filter((sec) => sec.questions.length > 0 || sec.name.trim()),
     };
-    if (!payload.sections.some((sec) => sec.questions.length > 0)) {
-      showToast('Agrega al menos una pregunta');
-      return;
-    }
     setSaving(true);
     try {
       if (mode === 'create') {
